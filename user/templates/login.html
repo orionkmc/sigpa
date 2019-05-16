@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="UTF-8">
+  <title>Login :: SIGPA</title>
+  {# bootstrap #}
+  <link rel="stylesheet" href="{% static '/dist/bootstrap/css/bootstrap.min.css' %}">
+  
+  {# fontawesome #}
+  <link href="{% static '/dist/fontawesome/css/fontawesome.min.css' %}" rel="stylesheet">
+  <link href="{% static '/dist/fontawesome/css/brands.min.css' %}" rel="stylesheet">
+  <link href="{% static '/dist/fontawesome/css/solid.min.css' %}" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static '/assets/css/palete.css' %}">
+  <link rel="stylesheet" href="{% static '/assets/css/login.css' %}">
+</head>
+<body>
+  <img src="{% static '/assets/img/banner.jpg' %}" style="height: 70px; width: 100%;" />
+
+  <div class="container">
+    <div class="row">
+      <!-- Formulario -->
+      <div class="col-lg-4" style="margin-top: 5em;">
+        <div class="card">
+          <div class="card-body">
+            <!-- Pestañas -->
+            <ul class="nav nav-tabs" id="login" role="tablist">
+              <li class="nav-item w-50">
+                <a class="nav-link active" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Entrar</a>
+              </li>
+              <li class="nav-item w-50">
+                <a class="nav-link" id="change_pass_tab" data-toggle="tab" href="#change_pass" role="tab" aria-controls="change_pass" aria-selected="false">Reestablecer</a>
+              </li>
+            </ul>
+            <!-- Fin pestañas -->
+
+            <!-- Contenido de las pestañas -->
+            <div class="tab-content" id="loginContent">
+              <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+                <br>
+                <!-- Formulario para iniciar sesión -->
+                <form action="" method="POST">
+                  {% csrf_token %}
+                  {% for error in errors %}
+                    <p class="text-center text-danger">
+                        {{ error }}
+                    </p>
+                  {% endfor %}
+                  <div class="input-group mb-2 mr-sm-2">
+                    {{form.dni}}
+                    <div class="input-group-prepend">
+                      <div class="border-left-0 input-group-text"><i class="fas fa-user"></i></div>
+                    </div>
+                  </div>
+
+                  <div class="input-group mb-2 mr-sm-2">
+                    {{form.password}}
+                    <div class="input-group-prepend">
+                      <div class="border-left-0 input-group-text"><i class="fas fa-lock"></i></div>
+                    </div>
+                  </div>
+                  <input class="btc btn-primary btn-block btn-lg" type="submit" value="Entrar">
+                </form>
+
+                <!-- Fin formulario para iniciar sesión -->
+              </div>
+              <div class="tab-pane fade" id="change_pass" role="tabpanel" aria-labelledby="change_pass_tab">
+                <!-- Formulario para reestablecer la contraseña -->
+                <!-- Fin formulario para reestablecer la contraseña -->
+              </div>
+            </div>
+            <!-- Fin contenido de las pentañas -->
+          </div>
+        </div>
+      </div>
+      <!-- Fin formulario -->
+      <!-- Información -->
+
+      <div class="col-7 offset-1 text-justify">
+        <h1 class="pb-2 mt-4 mb-2 border-bottom">Vicerectorado académico</h1>
+        <dl>
+          <dt style="font-size: 1.3em;">Misión</dt>
+          <dd>Coordinar la materialización de los planes y programas de la oferta académica para contribuir con la formación profesional universitaria y la municipalización de la educación.</dd>
+
+          <dt style="font-size: 1.3em;">Visión</dt>
+          <dd>Potenciar el desarrollo de una docencia de excelencia, transversal y flexible que permita obtener un egresado conpetente y crítica en un contexto de permanente cambio.</dd>
+
+          <dt style="font-size: 1.3em;">Objetivo general</dt>
+          <dd>Supervisar las actividades académicas y administrativas de docencia, investigación y extensión de la universidad en los niveles de estudios y pregrado</dd>
+
+          <dt style="font-size: 1.3em;">Objetivos especificos</dt>
+          <dd>
+            <ul>
+              <li>Controlar la materialización de los planes y programas de las ofertas académicas de la institución para contribuir con la formación de profesionales universitarios.</li>
+              <li>Convocar al concejo acdémico universitario de las diferentes universidades integradoras de los <abbr title="Proyecto Nacional de Formación" class="initialism">PNF</abbr> y Carreras cortas de acuerdo al diagrama estructural vigente.</li>
+              <li>Controlar las acciones necesarias para garantizar la gestión y unificación de los <abbr title="Proyecto Nacional de Formación" class="initialism">PNF</abbr> y carreras cortas en las sedes y los diferentes núcleos</li>
+              <li>Fomentar ante las universidades integradoras de los <abbr title="Proyecto Nacional de Formación" class="initialism">PNF</abbr> y carreras cortas los planes y proyectos en concordancia con las líneas emanadas del <abbr title="Ministerio del Poder Popular para Educación Universitaria, Ciencia y Tecnología" class="initialism">MPPEUCT</abbr> que permitan el buen desenvolvimiento de la academia universitaria</li>
+              <li>Garantizar la realización de las actividades docentes con la máxima calidad y eficiencia, en concordancia con los objetivos y políticas institucionales</li>
+              <li>Velar por los ajustes curriculares presentados por las unidades integradoras de los <abbr title="Proyecto Nacional de Formación" class="initialism">PNF</abbr> y carreras cortas de las sedes y de los núcleos</li>
+              <li>Dar respuesta a las consultas académicas y funcionamiento que formule los órganos directivos y las comunidades en general</li>
+            </ul>
+          </dd>
+        </dl>
+      </div>
+      <!-- Fin información -->
+
+    </div>
+  </div>
+
+  <script src="{% static '/dist/jquery/jquery-3.4.0.min.js' %}"></script>
+  <script src="{% static '/dist/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static '/dist/bootstrap/js/bootstrap.min.js' %}"></script>
+</body>
+</html>

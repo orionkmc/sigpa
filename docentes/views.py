@@ -1,3 +1,13 @@
+from django.views.generic import View
 from django.shortcuts import render
+from docentes.models import Docentes
 
-# Create your views here.
+
+class DocentesView(View):
+    def get(self, request):
+        d = Docentes.objects.all()
+
+        context = {
+            'docentes': d,
+        }
+        return render(request, 'docentes/docentes.html', context)

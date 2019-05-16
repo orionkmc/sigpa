@@ -1,0 +1,88 @@
+{% extends 'layouts.html' %}
+{% load static %}
+
+{% block planificacion_display %}display: block;{% endblock %}
+{% block secciones_active %}link-current{% endblock %}
+
+{% block content %}
+  <div class="content-box mb-3">
+    <h1>Periodo Academico {{malla_periodo.0.periodo.nombre}}</h1>
+    <br>
+    <div class="row">
+      {% for mp in malla_periodo %}
+        <div class="col-12">
+          <h3 class="page-header">
+            {{mp.trimestre.subestructura.nombre}}-{{mp.trimestre.nombre}}({{mp.trimestre}})<a
+              href="#"
+              class="btn-sm text-success"
+              data-toggle="tooltip"
+              data-placement="top"
+              title="Agregar otra sección">
+              <span class="list-icon">
+                <i class="fas fa-plus"></i>
+              </span>
+            </a>
+          </h3>
+          <table class="table table-hover table-sm">
+            <thead>
+              <tr>
+                <th>codigo</th>
+                <th>nombre</th>
+                <th>turno</th>
+                <th class="text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for sec in mp.seccion_malla_periodo.all %}
+                <tr>
+                  <td>{{sec.codigo}}</td>
+                  <td>Sección {{sec.nombre}}</td>
+                  <td>{{sec.turno}}</td>
+                  <td class="text-right pr-5">
+                    <a
+                      href="{% url 'seccion_ver' mp.periodo.pk sec.pk %}"
+                      class="btn btn-outline-danger btn-sm"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="Ver Sección">
+                      <span class="list-icon">
+                        <i class="fas fa-search"></i>
+                      </span>
+                    </a>
+                    <a
+                      href="{% url 'seccion' mp.periodo.pk sec.pk %}"
+                      class="btn btn-outline-danger btn-sm"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="Editar Sección">
+                      <span class="list-icon">
+                        <i class="fas fa-edit"></i>
+                      </span>
+                    </a>
+                    <a
+                      href="#"
+                      class="btn btn-outline-danger btn-sm"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="Eliminar Sección">
+                      <span class="list-icon">
+                        <i class="fas fa-trash"></i>
+                      </span>
+                    </a>
+                  </td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="4" class="text-center">No tiene secciones asignadas</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}

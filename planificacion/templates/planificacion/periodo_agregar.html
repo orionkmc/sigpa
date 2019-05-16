@@ -1,0 +1,198 @@
+{% extends 'layouts.html' %}
+{% load static %}
+
+{% block planificacion_display %}display: block;{% endblock %}
+{% block planificacion_active %}link-current{% endblock %}
+
+{% block content %}
+    <!-- one box -->
+    <div class="content-box mb-3">
+        <h1 class="page-header">Nuevo periodo</h1>
+        <form action="" method="POST">
+            {% csrf_token %}
+            
+            <div class="row">
+              <div class="col-md-6 form-group {% if periodo_form.codigo.errors %}parsley-error{% endif %}">
+                {{ periodo_form.codigo }}
+                {% if periodo_form.codigo.help_text %}
+                  <p class="help">{{ periodo_form.codigo.help_text|safe }}</p>
+                {% endif %}
+                {% for error in periodo_form.codigo.errors %}
+                  <p class="help-block">{{ error }}</p>
+                {% endfor %}
+              </div>
+              
+              <div class="col-md-6 form-group {% if periodo_form.nombre.errors %}parsley-error{% endif %}">
+                {{ periodo_form.nombre }}
+                {% if periodo_form.nombre.help_text %}
+                  <p class="help">{{ periodo_form.nombre.help_text|safe }}</p>
+                {% endif %}
+                {% for error in periodo_form.nombre.errors %}
+                  <p class="help-block">{{ error }}</p>
+                {% endfor %}
+              </div>
+              
+              <div class="col-md-6 form-group {% if periodo_form.fecha_inicio.errors %}parsley-error{% endif %}">
+                {{ periodo_form.fecha_inicio }}
+                {% if periodo_form.fecha_inicio.help_text %}
+                  <p class="help">{{ periodo_form.fecha_inicio.help_text|safe }}</p>
+                {% endif %}
+                {% for error in periodo_form.fecha_inicio.errors %}
+                  <p class="help-block">{{ error }}</p>
+                {% endfor %}
+              </div>
+
+              <div class="col-md-6 form-group {% if periodo_form.fecha_fin.errors %}parsley-error{% endif %}">
+                {{ periodo_form.fecha_fin }}
+                {% if periodo_form.fecha_fin.help_text %}
+                  <p class="help">{{ periodo_form.fecha_fin.help_text|safe }}</p>
+                {% endif %}
+                {% for error in periodo_form.fecha_fin.errors %}
+                  <p class="help-block">{{ error }}</p>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3 form-group {% if malla_form.malla.errors %}parsley-error{% endif %}">
+                {{ malla_form.malla }}
+                {% if malla_form.malla.help_text %}
+                  <p class="help">{{ malla_form.malla.help_text|safe }}</p>
+                {% endif %}
+                {% for error in malla_form.malla.errors %}
+                  <p class="help-block">{{ error }}</p>
+                {% endfor %}
+              </div>
+
+              <div class="col-md-3 form-group {% if malla_form.subestructura.errors %}parsley-error{% endif %}">
+                {{ malla_form.subestructura }}
+                {% if malla_form.subestructura.help_text %}
+                  <p class="help">{{ malla_form.subestructura.help_text|safe }}</p>
+                {% endif %}
+                {% for error in malla_form.subestructura.errors %}
+                  <p class="help-block">{{ error }}</p>
+                {% endfor %}
+              </div>
+
+              <div class="col-md-3 form-group {% if malla_form.sub_subestructura.errors %}parsley-error{% endif %}">
+                {{ malla_form.sub_subestructura }}
+                {% if malla_form.sub_subestructura.help_text %}
+                  <p class="help">{{ malla_form.sub_subestructura.help_text|safe }}</p>
+                {% endif %}
+                {% for error in malla_form.sub_subestructura.errors %}
+                  <p class="help-block">{{ error }}</p>
+                {% endfor %}
+              </div>
+
+              <div class="col-md-3 form-group">
+                <input id="id_secciones" class="form-control form-control-sm" type="number" name="" value="" placeholder="Nº Secciones" min="1">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <button id="addPlanificacion" type="button" class="btn btn-secondary btn-block"> <i class="fas fa-plus"></i></button>
+              </div>
+            </div>
+
+            <br>
+            <div id="table_tt" class="row"></div>
+            
+            <br>
+            <input class="btn btn-primary btn-block" type="submit" value="Guardar">
+        </form>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+  $("#id_malla").change(function () {
+    let malla = $(this).val();
+    $.ajax({
+      url: '/ajax/trayecto/',
+      data: {
+        'malla': malla
+      },
+      dataType: 'json',
+      success: function (data) {
+        if (data.status) {
+          let select = '<option value="">Selecciona un Trayecto</option>'
+          for(i in data.results){
+            select += `<option value="${data.results[i].pk}">${data.results[i].nombre}</option>`
+            $("#id_subestructura").html(select)
+          }
+        }
+      }
+    });
+  });
+
+  $("#id_subestructura").change(function () {
+    let trayecto = $(this).val();
+    $.ajax({
+      url: '/ajax/trimestre/',
+      data: {
+        'trayecto': trayecto
+      },
+      dataType: 'json',
+      success: function (data) {
+        if (data.status) {
+          let select = '<option value="">Selecciona un Trimestre</option>'
+          for(i in data.results){
+            select += `<option value="${data.results[i].pk}">${data.results[i].nombre}(${data.results[i].codigo})</option>`
+            $("#id_sub_subestructura").html(select)
+          }
+        }
+      }
+    });
+  });
+
+  $("#addPlanificacion").click(function () {
+    let trimestre = $("#id_sub_subestructura").val();
+    let secciones = $("#id_secciones").val();
+    sub_sub_estructura = $("#id_sub_subestructura").text()
+    console.log(secciones)
+    $.ajax({
+      url: '/ajax/malla/',
+      data: {
+        'trimestre': trimestre
+      },
+      dataType: 'json',
+      success: function (data) {
+
+        if (data.status) {
+          table_tt = `<div class="col-12">
+            <div class="table-responsive">
+              <h3 class="page-header text-center">${data.sub_sub_estructura}</h3>
+
+              <input type="hidden" name="secciones[]" value="${secciones}">
+              <input type="hidden" name="tt[]" value="${trimestre}">
+
+              <table class="table table-hover table-sm">
+                <thead>
+                  <tr>
+                    <th scope="col">Unidad Curricular</th>
+                    <th scope="col">Nº Hra.</th>
+                    <th scope="col">Nº Secc.</th>
+                    <th scope="col">Total Hra.</th>
+                  </tr>
+                </thead>
+                <tbody>`
+                  for(i in data.results){
+                    table_tt += `<tr>
+                      <td>${data.results[i].unidad_credito}</td>
+                      <td>${data.results[i].horas}</td>
+                      <td>${secciones}</td>
+                      <td></td>
+                    </tr>`
+                  }
+                table_tt += `</tbody>
+              </table>
+            </div>
+          </div>`
+          $("#table_tt").append(table_tt);
+        }
+      }
+    });
+  });
+  </script>
+{% endblock %}

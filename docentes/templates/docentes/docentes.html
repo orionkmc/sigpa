@@ -1,0 +1,70 @@
+{% extends 'layouts.html' %}
+{% load static %}
+
+{% block docentes_display %}display: block;{% endblock %}
+{% block docentes_active %}link-current{% endblock %}
+
+{% block content %}
+  <div class="content-box mb-3">
+    <h1>Docentes</h1>
+    <br>
+    <div class="row">
+      <div class="col-12">
+        <table class="table table-hover table-sm">
+          <thead>
+            <tr>
+              <th>Cedula</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for docente in docentes %}
+              <tr>
+                <td>{{docente.cedula}}</td>
+                <td>{{docente.nombre}}</td>
+                <td>{{docente.apellido}}</td>
+                <td class="text-center">
+                  <a
+                    href="#"
+                    class="btn btn-outline-danger btn-sm"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Ver Profesor">
+                    <span class="list-icon">
+                      <i class="fas fa-search"></i>
+                    </span>
+                  </a>
+                  <a
+                    href="#"
+                    class="btn btn-outline-danger btn-sm"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Editar Profesor">
+                    <span class="list-icon">
+                      <i class="fas fa-edit"></i>
+                    </span>
+                  </a>
+                  <a
+                    href="#"
+                    class="btn btn-outline-danger btn-sm"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Eliminar Profesor">
+                    <span class="list-icon">
+                      <i class="fas fa-trash"></i>
+                    </span>
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}

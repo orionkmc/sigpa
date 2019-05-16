@@ -1,0 +1,60 @@
+{% extends 'layouts.html' %}
+{% load static %}
+
+{% block planificacion_display %}display: block;{% endblock %}
+{% block secciones_active %}link-current{% endblock %}
+
+{% block content %}
+  <div class="content-box mb-3">
+    <h1>Periodo Academico {{seccion.periodo.periodo}}, Sección "{{seccion}}", {{seccion.periodo}}</h1>
+    <br>
+    <div class="row">
+      <div class="col-12">
+        <form action="" method="POST">
+          {% csrf_token %}
+          <table class="table table-hover table-sm">
+            <thead>
+              <tr>
+                <th>Unidad Curricular</th>
+                <th>Docente</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <td colspan="2" class="text-center">
+                  <a
+                    href="#"
+                    class="btn btn-outline-light btn-block btn-sm text-danger"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Agregar Unidad Curricular">
+                    <span class="list-icon">
+                      <i class="fas fa-plus"></i>
+                    </span>
+                  </a>
+                </td>
+              </tr>
+            </tfoot>
+            <tbody>
+              {% for m in muce %}
+                <tr>
+                  <td>
+                    {{m}}
+                    <input type="hidden" name="uc[]" value="{{m.unidad_credito.pk}}">
+                  </td>
+                  <td>
+                    {{docentes.docente}}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <input class="btn btn-primary btn-block" type="submit" value="Guardar">
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}

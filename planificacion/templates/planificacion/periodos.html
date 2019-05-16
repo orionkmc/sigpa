@@ -1,0 +1,62 @@
+{% extends 'layouts.html' %}
+{% load static %}
+
+{% block planificacion_display %}display: block;{% endblock %}
+{% block periodos_active %}link-current{% endblock %}
+
+{% block content %}
+  <div class="content-box mb-3">
+    <h1>Pediodos Academicos</h1>
+    <table class="table table-hover table-sm">
+      <thead>
+        <thead>
+          <tr>
+            <th>Codigo</th>
+            <th>Nombre</th>
+            <th>Fecha de Inicio</th>
+            <th>Fecha de Fin</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for periodo in periodos %}
+            <tr>
+              <td>{{ periodo.codigo }}</td>
+              <td>{{ periodo.nombre }}</td>
+              <td>{{ periodo.fecha_inicio }}</td>
+              <td>{{ periodo.fecha_fin }}</td>
+              <td>
+                <a href="{% url 'periodo' periodo.pk %}" class="btn btn-outline-danger btn-sm">
+                  <span class="list-icon"><i class="fas fa-search"></i></span>
+                </a>
+                <a
+                  href="{% url 'secciones' periodo.pk %}"
+                  class="btn btn-outline-danger btn-sm"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Ver Secciones">
+                  <span class="list-icon">
+                    <i class="fas fa-font"></i>
+                  </span>
+                </a>
+                <a
+                  href="{% url 'periodo_nuevo' periodo.pk %}"
+                  class="btn btn-outline-danger btn-sm"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Generar Próximo Periodo">
+                  <span class="list-icon">
+                    <i class="fas fa-arrow-right"></i>
+                  </span>
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </thead>
+    </table>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}

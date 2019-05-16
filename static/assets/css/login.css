@@ -1,0 +1,19 @@
+.nav-tabs .nav-item:hover{
+  background-color: #eee;
+  border-radius: 4px 4px 0 0;
+}
+
+a{
+  color: #00005b;
+}
+a:hover{
+  color: #00005b;
+}
+
+h1{
+  font-size: 36px;
+}
+
+input[type=submit]{
+    margin:0px;
+}

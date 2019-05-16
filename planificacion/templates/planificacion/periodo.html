@@ -1,0 +1,39 @@
+{% extends 'layouts.html' %}
+{% load static %}
+
+{% block planificacion_display %}display: block;{% endblock %}
+{% block periodos_active %}link-current{% endblock %}
+
+{% block content %}
+  <!-- one box -->
+  <div class="content-box mb-3">
+    <h1 class="page-header">Periodo {{periodo.nombre}}</h1>
+    <div class="row">
+      {% for mp in mps %}
+        <div class="col-md-6">
+          <h2 class="page-header">{{mp.trimestre}}</h2>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Unidad Curricular</th>
+                <th>Nº Hora</th>
+                <th>Nº Sección</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for a in mp.trimestre.malla_uce_sub_sub_estructura.all %}
+                <tr>
+                  <td>{{a.unidad_credito.nombre}}</td>
+                  <td>{{a.horas_total}}</td>
+                  <td>{{mp.secciones}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}{% endblock %}
