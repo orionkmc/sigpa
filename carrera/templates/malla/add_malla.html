@@ -1,0 +1,118 @@
+{% extends 'layouts.html' %}
+{% load static %}
+
+{% block carrera_display %}display: block;{% endblock %}
+{% block uc_active %}link-current{% endblock %}
+
+{% block content %}
+  <div class="content-box mb-3">
+    {% if alert %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>¡La Malla fue agregada con exito!</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    {% endif %}
+    <h1>
+      Agregar Malla
+    </h1>
+    <br>
+    <div class="row">
+      <div class="col-12">
+        <form action="" method="POST">
+          {% csrf_token %}
+          {{ malla_form.cod }}
+          <p class="form-text text-muted">Solo están permitidos caracteres alfanuméricos y guiones. Ej: PNFI-2019.</p>
+
+          {#  #}
+          <div class="accordion" id="accordionTT">
+
+            <div class="card"> <!-- inicio -->
+              <div class="card-header" id="Trayecto1">
+                <h2 class="mb-0">
+                  <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseT1" aria-expanded="true" aria-controls="collapseT1">
+                    Trayecto 1(T1)
+                  </button>
+                </h2>
+              </div>
+              <div id="collapseT1" class="collapse show" aria-labelledby="Trayecto1">
+                <div class="card-body">
+                  Collapsible Group Item #1
+                </div>
+              </div>
+            </div> <!-- fin -->
+
+            <div class="card"> <!-- inicio -->
+              <div class="card-header" id="Trayecto2">
+                <h2 class="mb-0">
+                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseT2" aria-expanded="false" aria-controls="collapseT2">
+                    Trayecto 2(T2)
+                  </button>
+                </h2>
+              </div>
+              <div id="collapseT2" class="collapse" aria-labelledby="Trayecto2">
+                <div class="card-body">
+                  Collapsible Group Item #2
+                </div>
+              </div>
+            </div> <!-- fin -->
+            
+            <div class="card"> <!-- inicio -->
+              <div class="card-header" id="Trayecto3">
+                <h2 class="mb-0">
+                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseT3" aria-expanded="false" aria-controls="collapseT3">
+                    Trayecto 3(T3)
+                  </button>
+                </h2>
+              </div>
+              <div id="collapseT3" class="collapse" aria-labelledby="Trayecto3">
+                <div class="card-body">
+                  Collapsible Group Item #3
+                </div>
+              </div>
+            </div> <!-- fin -->
+
+            <div class="card"> <!-- inicio -->
+              <div class="card-header" id="Trayecto4">
+                <h2 class="mb-0">
+                  <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseT4" aria-expanded="false" aria-controls="collapseT4">
+                    Trayecto 4(T4)
+                  </button>
+                </h2>
+              </div>
+              <div id="collapseT4" class="collapse" aria-labelledby="Trayecto4">
+                <div class="card-body">
+                  Collapsible Group Item #4
+                </div>
+              </div>
+            </div> <!-- fin -->
+
+          </div>
+          {#  #}
+          <input type="submit" class="btn btn-primary btn-block" value="Guardar">
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}{% endblock %}
+
+<div class="accordion" id="accordionT1T1">
+  <div class="card">
+    <div class="card-header" id="headingOne">
+      <h2 class="mb-0 text-center">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#subcollapset1t1" aria-expanded="true" aria-controls="collapseOne">
+          Trimestre 1(t1)
+        </button>
+      </h2>
+    </div>
+      <div id="subcollapset1t1" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionT1T1">
+        <div class="card-body">
+          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

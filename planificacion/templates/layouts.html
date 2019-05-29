@@ -44,7 +44,7 @@
                                     <li><a href="{% url 'docentes' %}" class="list-link {% block docentes_active %}{% endblock %}">
                                         <span class="list-icon"><i class="fas fa-calendar-alt"></i></span>Ver Docentes
                                     </a></li>
-                                    <li><a href="#" class="list-link {% block agregar_docente_active %}{% endblock %}">
+                                    <li><a href="{% url 'docente_add' %}" class="list-link {% block docente_add_active %}{% endblock %}">
                                         <span class="list-icon"><i class="fas fa-calendar-alt"></i></span>Agregar Docente
                                     </a></li>
                                 </ul>
@@ -56,19 +56,10 @@
                                     Carrera
                                 </a>
                                 <ul class="list-unstyled list-hidden" style="{% block carrera_display %}display: none;{% endblock %}">
-                                    <li><a href="#" class="list-link">
-                                        <span class="list-icon"><i class="fas fa-calendar-alt"></i></span>Ejes
-                                    </a></li>
-                                    <li><a href="#" class="list-link">
+                                    <li><a href="{% url 'ucurriculares' %}" class="list-link {% block uc_active %}{% endblock %}">
                                         <span class="list-icon"><i class="fas fa-font"></i></span> Unidades Curriculares
                                     </a></li>
-                                    <li><a href="#" class="list-link">
-                                        <span class="list-icon"><i class="fas fa-hourglass"></i></span>Estructuras
-                                    </a></li>
-                                    <li><a href="#" class="list-link">
-                                        <span class="list-icon"><i class="fas fa-file-archive"></i></span>Areas
-                                    </a></li>
-                                    <li><a href="#" class="list-link">
+                                    <li><a href="{% url 'mallas' %}" class="list-link {% block malla_active %}{% endblock %}">
                                         <span class="list-icon"><i class="fas fa-file-archive"></i></span>Mallas
                                     </a></li>
                                 </ul>
@@ -85,15 +76,6 @@
                                     </a></li>
                                     <li><a href="{% url 'periodos' %}" class="list-link {% block periodos_active %}{% endblock %}">
                                         <span class="list-icon"><i class="fas fa-calendar-alt"></i></span>Periodos
-                                    </a></li>
-                                    <li><a href="#" class="list-link {% block secciones_active %}{% endblock %}">
-                                        <span class="list-icon"><i class="fas fa-font"></i></span> Secciones
-                                    </a></li>
-                                    <li><a href="#" class="list-link">
-                                        <span class="list-icon"><i class="fas fa-hourglass"></i></span>Carga Academica
-                                    </a></li>
-                                    <li><a href="{% url 'planificacion_planillas' %}" class="list-link {% block planificacion_planillas_active %}{% endblock %}">
-                                        <span class="list-icon"><i class="fas fa-file-archive"></i></span>Planillas
                                     </a></li>
                                 </ul>
                             </li>

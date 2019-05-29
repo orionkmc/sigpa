@@ -1,0 +1,32 @@
+{% extends 'layouts.html' %}
+{% load static %}
+
+{% block docentes_display %}display: block;{% endblock %}
+{% block docente_add_active %}link-current{% endblock %}
+
+{% block content %}
+  <div class="content-box mb-3">
+    {% if alert %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>¡Docente guardado con exito!</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    {% endif %}
+    <h1>Agregar Docente</h1>
+    <br>
+    <div class="row">
+      <div class="col-12">
+        <form action="" method="POST">
+          {% csrf_token %}
+          {{ docente_form.as_p }}
+          <input type="submit" class="btn btn-primary btn-block" value="Guardar">
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}

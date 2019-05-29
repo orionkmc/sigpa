@@ -16,8 +16,8 @@ class UnidadCurricular(models.Model):
 
 
 class Malla(models.Model):
-    cod = models.CharField(u'Trayecto y Trimestre', max_length=100)
-    fecha = models.DateField("fecha", null=True, blank=True, auto_now=True)
+    cod = models.CharField(u'Nombre', max_length=100)
+    fecha = models.DateField("Fecha", null=True, blank=True, auto_now=True)
 
     def __str__(self):
         return self.cod

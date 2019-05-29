@@ -1,8 +1,8 @@
 {% extends 'layouts.html' %}
 {% load static %}
 
-{% block docentes_display %}display: block;{% endblock %}
-{% block docentes_active %}link-current{% endblock %}
+{% block carrera_display %}display: block;{% endblock %}
+{% block uc_active %}link-current{% endblock %}
 
 {% block css %}
   <link rel="stylesheet" href="{% static 'dist/data_tables/css/dataTables.bootstrap4.css' %}">
@@ -12,22 +12,24 @@
   <div class="content-box mb-3">
     {% if alert %}
       <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong>¡El Docente fue eliminado con exito!</strong>
+        <strong>¡La Unidad Curricula fue eliminada con exito!</strong>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
     {% endif %}
-    <h1>Docentes</h1>
+    <h1>
+      Unidades Curriculares
+    </h1>
     <br>
     <div class="row">
       <div class="col-12">
         <table class="table table-striped table-bordered table-hover table-sm datatables">
           <thead>
             <tr>
-              <th>Cedula</th>
+              <th>Código</th>
               <th>Nombre</th>
-              <th>Apellido</th>
+              <th>Unidad de credito</th>
               <th class="text-center">Acciones</th>
             </tr>
           </thead>
@@ -35,11 +37,11 @@
             <tr>
               <th colspan="4" class="text-center">
                 <a
-                  href="{% url 'docente_add' %}"
+                  href="{% url 'ucurricular_add' %}"
                   class="text-danger"
                   data-toggle="tooltip"
                   data-placement="top"
-                  title="Agregar Profesor">
+                  title="Agregar Unidad Curricular">
                   <span class="list-icon">
                     <i class="fas fa-plus"></i>
                   </span>
@@ -48,40 +50,40 @@
             </tr>
           </tfoot>
           <tbody>
-            {% for docente in docentes %}
+            {% for uc in unidades_curriculares %}
               <tr>
-                <td>{{docente.cedula}}</td>
-                <td>{{docente.nombre}}</td>
-                <td>{{docente.apellido}}</td>
+                <td>{{uc.codigo}}</td>
+                <td>{{uc.nombre}}</td>
+                <td>{{uc.uni_credi}}</td>
                 <td class="text-center">
                   <a
                     href="#"
                     class="btn btn-outline-danger btn-sm"
                     data-toggle="tooltip"
                     data-placement="top"
-                    title="Ver Docente">
+                    title="Ver Unidad Curricular">
                     <span class="list-icon">
                       <i class="fas fa-search"></i>
                     </span>
                   </a>
                   <a
-                    href="{% url 'docente_edit' docente.pk %}"
+                    href="{% url 'ucurricular_edit' uc.pk %}"
                     class="btn btn-outline-danger btn-sm"
                     data-toggle="tooltip"
                     data-placement="top"
-                    title="Editar Docente">
+                    title="Editar Unidad Curricular">
                     <span class="list-icon">
                       <i class="fas fa-edit"></i>
                     </span>
                   </a>
                   <form action="" method="POST" class="d-inline">
                     {% csrf_token %}
-                    <input type="hidden" name="docente" value="{{ docente.pk }}">
+                    <input type="hidden" name="uc" value="{{ uc.pk }}">
                     <button
                       class="btn-delete btn btn-outline-danger btn-sm"
                       data-toggle="tooltip"
                       data-placement="top"
-                      title="Eliminar Docente">
+                      title="Eliminar Unidad Curricular">
                       <span class="list-icon">
                         <i class="fas fa-trash"></i>
                       </span>
@@ -100,14 +102,13 @@
 {% block javascript %}
 <script src="{% static 'dist/data_tables/js/jquery.dataTables.min.js' %}"></script>
 <script src="{% static 'dist/data_tables/js/dataTables.bootstrap4.min.js' %}"></script>
-
 <script>
   $(function () {
     $('.datatables').DataTable();
 
     $(".btn-delete").click(function (e) {
       e.preventDefault();
-      a = confirm('¿Estas seguro que deseas eliminar este docente?')
+      a = confirm('¿Estas seguro que deseas eliminar esta Unidad Curricular?')
       if (a) {
         $("form").submit();  
       }

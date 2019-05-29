@@ -3,9 +3,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth.decorators import login_required
+
+# Views
 from user.views import LoginView, LogoutView
 from planificacion import views as views_planificacion
 from docentes import views as views_docentes
+from carrera import views as views_carrera
 
 urlpatterns = [
     path('', login_required(views_planificacion.home), name='home'),
@@ -20,6 +23,38 @@ urlpatterns = [
         'docentes/',
         login_required(views_docentes.DocentesView.as_view()),
         name='docentes'),
+    path(
+        'docente/agregar',
+        login_required(views_docentes.AddDocenteView.as_view()),
+        name='docente_add'),
+    path(
+        'docente/editar/<int:docente>',
+        login_required(views_docentes.EditDocenteView.as_view()),
+        name='docente_edit'),
+
+    # Unidades Curriculares
+    path(
+        'unidades-curriculares/',
+        login_required(views_carrera.UnidadesCurricularesView.as_view()),
+        name='ucurriculares'),
+    path(
+        'unidades-curriculares/agregar',
+        login_required(views_carrera.AddUnidadCurricularView.as_view()),
+        name='ucurricular_add'),
+    path(
+        'unidades-curriculares/editar/<int:uc>',
+        login_required(views_carrera.EditUnidadCurricularView.as_view()),
+        name='ucurricular_edit'),
+
+    # Malla
+    path(
+        'mallas/',
+        login_required(views_carrera.MallasView.as_view()),
+        name='mallas'),
+    path(
+        'malla/agregar',
+        login_required(views_carrera.AddMallaView.as_view()),
+        name='malla_add'),
 
     # Periodos
     path(
