@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from carrera.models import Malla
+# from carrera.models import Malla
 from planificacion.models import Periodo
 from django.forms import ModelForm
-from docentes.models import Docentes
+# from docentes.models import Docentes
 
 
 class PeriodoForm(ModelForm):
@@ -35,7 +35,7 @@ class PeriodoForm(ModelForm):
 class MallaForm(forms.Form):
     CHOICES_MALLA = (
         ('', 'Mallas Academicas'),
-        ('', [(x.pk, x.cod) for x in Malla.objects.all()],),
+        # ('', [(x.pk, x.cod) for x in Malla.objects.all()],),
     )
 
     CHOICES_SUBESTRUCTURA = (
@@ -65,7 +65,7 @@ class MallaForm(forms.Form):
 class DocenteForm(forms.Form):
     CHOICES_DOCENTE = (
         ('', 'Selecciona un Docente'),
-        ('', [(x.pk, x.nombre) for x in Docentes.objects.all()],),
+        # ('', [(x.pk, x.nombre) for x in Docentes.objects.all()],),
     )
 
     docente = forms.CharField(
