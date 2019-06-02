@@ -63,6 +63,7 @@ class DocenteForm(forms.Form):
         queryset=Docentes.objects.all(),
         empty_label="Selecciona un Docente",
         widget=forms.Select(
+
             attrs={'class': 'form-control form-control-sm'},
         ),
         required=True
