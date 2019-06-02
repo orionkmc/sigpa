@@ -33,23 +33,19 @@ class PeriodoForm(ModelForm):
 
 
 class MallaForm(forms.Form):
-    CHOICES_MALLA = (
-        ('', 'Mallas Academicas'),
-        ('', [(x.pk, x.cod) for x in Malla.objects.all()],),
-    )
-
     CHOICES_SUBESTRUCTURA = (
         ('', 'Selecciona una Malla'),
     )
     CHOICES_SUB_SUBESTRUCTURA = (
         ('', 'Selecciona un Trayecto'),
     )
-
-    malla = forms.CharField(
-        label="Malla", widget=forms.Select(
+    malla = forms.ModelChoiceField(
+        queryset=Malla.objects.all(),
+        empty_label="Mallas Academicas",
+        widget=forms.Select(
             attrs={'class': 'form-control form-control-sm'},
-            choices=CHOICES_MALLA
-        ))
+        )
+    )
     subestructura = forms.CharField(
         label="Trayectos", widget=forms.Select(
             attrs={'class': 'form-control form-control-sm'},
@@ -63,13 +59,11 @@ class MallaForm(forms.Form):
 
 
 class DocenteForm(forms.Form):
-    CHOICES_DOCENTE = (
-        ('', 'Selecciona un Docente'),
-        ('', [(x.pk, x.nombre) for x in Docentes.objects.all()],),
-    )
-
-    docente = forms.CharField(
-        label="Docente", widget=forms.Select(
+    docente = forms.ModelChoiceField(
+        queryset=Docentes.objects.all(),
+        empty_label="Selecciona un Docente",
+        widget=forms.Select(
             attrs={'class': 'form-control form-control-sm'},
-            choices=CHOICES_DOCENTE
-        ), required=True)
+        ),
+        required=True
+    )
