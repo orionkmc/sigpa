@@ -55,6 +55,10 @@ urlpatterns = [
         'malla/agregar',
         login_required(views_carrera.AddMallaView.as_view()),
         name='malla_add'),
+    path(
+        'malla/editar/<int:malla>',
+        login_required(views_carrera.EditMallaView.as_view()),
+        name='malla_edit'),
 
     # Periodos
     path(

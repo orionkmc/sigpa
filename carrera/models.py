@@ -40,7 +40,7 @@ class SubSubEstructura(models.Model):
     nombre = models.CharField(u'Nombre', max_length=200)
     duracion = models.IntegerField(u'Duración')
     subestructura = models.ForeignKey(
-        Subestructura, null=True, on_delete=models.SET_NULL)
+        Subestructura, null=True, on_delete=models.SET_NULL, related_name="tt")
     parentId = models.ForeignKey(
         "self", on_delete=models.CASCADE, null=True, blank=True)
 
@@ -69,3 +69,8 @@ class MallaUCE(models.Model):
     @property
     def horas_total(self):
         return self.horas_teoricas + self.horas_practicas
+
+    @property
+    def mallauce_form(self):
+        from carrera.forms import MallauceForm
+        return MallauceForm(instance=self)
