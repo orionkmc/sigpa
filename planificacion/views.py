@@ -1,8 +1,9 @@
 from io import BytesIO
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.http import JsonResponse, HttpResponse
-from planificacion.forms import PeriodoForm, MallaForm, DocenteForm
+from planificacion.forms import PeriodoForm, MallaForm, DocenteForm,\
+    SeccionForm
 
 from carrera.models import Malla, Subestructura, SubSubEstructura,\
     MallaUCE, UnidadCurricular
@@ -55,7 +56,13 @@ class PlanificacionView(View):
                 mucep = MallaUCEPeriodo(
                     trimestre=sse, periodo=p, secciones=seccion)
                 mucep.save()
-
+                for x in range(0, int(seccion)):
+                    print(x)
+                    s = Seccion(
+                        codigo=SECCION_CHOICES[x],
+                        nombre=SECCION_CHOICES[x],
+                        periodo=mucep)
+                    s.save()
             periodo_form = PeriodoForm()
         context = {
             'periodo_form': periodo_form,
@@ -99,22 +106,14 @@ class PeriodosView(View):
 class PeriodoNuevoView(View):
     def get(self, request, periodo):
         periodo_form = PeriodoForm()
+        malla_form = MallaForm()
         periodo = Periodo.objects.get(pk=periodo)
         mps = MallaUCEPeriodo.objects.filter(periodo=periodo)
-        # m = []
-        # for mp in mps:
-        #     print(mp.trimestre)
-        #     print(mp.trimestre.parentId)
-        #     m.append(mp.trimestre.pk)
-        # m = set(m)
-        # mm = list(m)
-        # sse = SubSubEstructura.objects.filter(pk__in=mm)
-        # for ss in sse:
-        #     print(ss.parentId.malla_uce_sub_sub_estructura.all())
         context = {
             'mps': mps,
             'periodo': periodo,
             'periodo_form': periodo_form,
+            'malla_form': malla_form,
         }
         return render(request, 'planificacion/periodo_nuevo.html', context)
 
@@ -122,21 +121,17 @@ class PeriodoNuevoView(View):
         periodo_form = PeriodoForm(request.POST)
         periodo = Periodo.objects.get(pk=periodo)
         mps = MallaUCEPeriodo.objects.filter(periodo=periodo)
-        mp_pk = []
-        for mp in mps:
-            mp_pk.append(mp.secciones)
-            # m = set(m)
-            mps_pk = list(mp_pk)
 
         if periodo_form.is_valid():
             tt = request.POST.getlist('tt[]')
+            mps_pk = request.POST.getlist('mps_pk[]')
             p = periodo_form.save()
             for idx, mp in enumerate(mps_pk):
                 sse = SubSubEstructura.objects.get(pk=tt[idx])
                 mucep = MallaUCEPeriodo(
                     trimestre=sse, periodo=p, secciones=mp)
                 mucep.save()
-                for x in range(0, mp):
+                for x in range(0, int(mp)):
                     s = Seccion(
                         codigo=SECCION_CHOICES[x],
                         nombre=SECCION_CHOICES[x],
@@ -155,11 +150,60 @@ class PeriodoNuevoView(View):
 # # # # # # # # # # # # # # # # # # # # # # # #
 
 
+class AddSeccionView(View):
+    def get(self, request, periodo, tt):
+        periodo = Periodo.objects.get(pk=periodo)
+        mp = MallaUCEPeriodo.objects.get(pk=tt)
+        seccion_form = SeccionForm()
+        context = {
+            'periodo': periodo,
+            'mp': mp,
+            'seccion_form': seccion_form,
+        }
+        return render(request, 'secciones/add_seccion.html', context)
+
+    def post(self, request, periodo, tt):
+        periodo = Periodo.objects.get(pk=periodo)
+        mp = MallaUCEPeriodo.objects.get(pk=tt)
+
+        seccion_form = SeccionForm(request.POST)
+        if seccion_form.is_valid():
+            s_form = seccion_form.save(commit=False)
+            s_form.periodo = mp
+            s_form.save()
+
+            return redirect('secciones', periodo.pk)
+        context = {
+            'periodo': periodo,
+            'mp': mp,
+            'seccion_form': seccion_form,
+        }
+        return render(request, 'secciones/add_seccion.html', context)
+
+
 class SeccionesView(View):
     def get(self, request, periodo):
         malla_periodo = MallaUCEPeriodo.objects.filter(periodo=periodo)
         context = {
             'malla_periodo': malla_periodo
+        }
+        return render(request, 'secciones/secciones.html', context)
+
+    def post(self, request, periodo):
+        alert = False
+        malla_periodo = MallaUCEPeriodo.objects.filter(
+            periodo=periodo)
+        try:
+            d = Seccion.objects.get(pk=request.POST.get('seccion'))
+            a = d.delete()
+            if a:
+                alert = True
+        except Exception as e:
+            print(e)
+
+        context = {
+            'alert': alert,
+            'malla_periodo': malla_periodo,
         }
         return render(request, 'secciones/secciones.html', context)
 

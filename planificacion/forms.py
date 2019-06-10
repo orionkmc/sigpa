@@ -1,9 +1,31 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from carrera.models import Malla
-from planificacion.models import Periodo
+from planificacion.models import Periodo, Seccion, TURNO_CHOICES
 from django.forms import ModelForm
 from docentes.models import Docentes
+
+
+class SeccionForm(ModelForm):
+    class Meta:
+        model = Seccion
+        fields = ('codigo', 'nombre', 'turno',)
+        widgets = {
+            'codigo': forms.TextInput(attrs={
+                'class': 'form-control form-control-sm',
+                'placeholder': 'Código',
+            }),
+            'nombre': forms.TextInput(attrs={
+                'class': 'form-control form-control-sm',
+                'placeholder': 'nombre',
+            }),
+            'turno': forms.Select(
+                choices=TURNO_CHOICES,
+                attrs={
+                    'class': 'form-control form-control-sm',
+                    'placeholder': 'Turno',
+                }),
+        }
 
 
 class PeriodoForm(ModelForm):

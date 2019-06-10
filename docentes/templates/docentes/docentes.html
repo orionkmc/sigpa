@@ -109,7 +109,7 @@
       e.preventDefault();
       a = confirm('¿Estas seguro que deseas eliminar este docente?')
       if (a) {
-        $("form").submit();  
+        $(this).parent('form').submit();  
       }
     });
   });

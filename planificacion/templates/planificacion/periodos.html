@@ -1,23 +1,42 @@
 {% extends 'layouts.html' %}
 {% load static %}
 
+{% block css %}
+  <link rel="stylesheet" href="{% static 'dist/data_tables/css/dataTables.bootstrap4.css' %}">
+{% endblock %}
+
 {% block planificacion_display %}display: block;{% endblock %}
 {% block periodos_active %}link-current{% endblock %}
 
 {% block content %}
   <div class="content-box mb-3">
     <h1>Pediodos Academicos</h1>
-    <table class="table table-hover table-sm">
+    <table class="table table-striped table-bordered table-hover table-sm datatables">
       <thead>
-        <thead>
+        <tr>
+          <th>Codigo</th>
+          <th>Nombre</th>
+          <th>Fecha de Inicio</th>
+          <th>Fecha de Fin</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+       <tfoot>
           <tr>
-            <th>Codigo</th>
-            <th>Nombre</th>
-            <th>Fecha de Inicio</th>
-            <th>Fecha de Fin</th>
-            <th>Acciones</th>
+            <th colspan="5" class="text-center">
+              <a
+                href="{% url 'planificacion' %}"
+                class="text-danger"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Agregar Malla">
+                <span class="list-icon">
+                  <i class="fas fa-plus"></i>
+                </span>
+              </a>
+            </th>
           </tr>
-        </thead>
+        </tfoot>
         <tbody>
           {% for periodo in periodos %}
             <tr>
@@ -26,7 +45,12 @@
               <td>{{ periodo.fecha_inicio }}</td>
               <td>{{ periodo.fecha_fin }}</td>
               <td>
-                <a href="{% url 'periodo' periodo.pk %}" class="btn btn-outline-danger btn-sm">
+                <a
+                  href="{% url 'periodo' periodo.pk %}"
+                  class="btn btn-outline-danger btn-sm"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Ver Periodo">
                   <span class="list-icon"><i class="fas fa-search"></i></span>
                 </a>
                 <a
@@ -53,10 +77,17 @@
             </tr>
           {% endfor %}
         </tbody>
-      </thead>
     </table>
   </div>
 {% endblock %}
 
 {% block javascript %}
+  <script src="{% static 'dist/data_tables/js/jquery.dataTables.min.js' %}"></script>
+  <script src="{% static 'dist/data_tables/js/dataTables.bootstrap4.min.js' %}"></script>
+  <script>
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+      $('.datatables').DataTable();
+    });
+  </script>
 {% endblock %}

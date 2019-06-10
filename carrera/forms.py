@@ -22,9 +22,9 @@ class MallaForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(MallaForm, self).__init__(*args, **kwargs)
-        code_kuai = self.fields['cod'].widget
-        code_kuai.attrs['class'] = 'form-control form-control-sm'
-        code_kuai.attrs['placeholder'] = 'Codigo'
+        code = self.fields['cod'].widget
+        code.attrs['class'] = 'form-control form-control-sm'
+        code.attrs['placeholder'] = 'Codigo'
 
 
 class MallauceForm(forms.ModelForm):

@@ -76,6 +76,10 @@ urlpatterns = [
 
     # Secciones
     path(
+        'periodo/<int:periodo>/tt/<int:tt>/seccion/agregar',
+        login_required(views_planificacion.AddSeccionView.as_view()),
+        name='seccion_add'),
+    path(
         'periodo/<int:periodo>/secciones',
         login_required(views_planificacion.SeccionesView.as_view()),
         name='secciones'),

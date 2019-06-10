@@ -52,13 +52,61 @@
           {% endfor %}
         </div>
       </div>
+      <div class="row">
+        <div class="col-md-3 form-group {% if malla_form.malla.errors %}parsley-error{% endif %}">
+          {{ malla_form.malla }}
+          {% if malla_form.malla.help_text %}
+            <p class="help">{{ malla_form.malla.help_text|safe }}</p>
+          {% endif %}
+          {% for error in malla_form.malla.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
+        </div>
+
+        <div class="col-md-3 form-group {% if malla_form.subestructura.errors %}parsley-error{% endif %}">
+          {{ malla_form.subestructura }}
+          {% if malla_form.subestructura.help_text %}
+            <p class="help">{{ malla_form.subestructura.help_text|safe }}</p>
+          {% endif %}
+          {% for error in malla_form.subestructura.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
+        </div>
+
+        <div class="col-md-3 form-group {% if malla_form.sub_subestructura.errors %}parsley-error{% endif %}">
+          {{ malla_form.sub_subestructura }}
+          {% if malla_form.sub_subestructura.help_text %}
+            <p class="help">{{ malla_form.sub_subestructura.help_text|safe }}</p>
+          {% endif %}
+          {% for error in malla_form.sub_subestructura.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
+        </div>
+
+        <div class="col-md-3 form-group">
+          <input id="id_secciones" class="form-control form-control-sm" type="number" name="" value="" placeholder="Nº Secciones" min="1">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+          <button id="addPlanificacion" type="button" class="btn btn-secondary btn-block"> <i class="fas fa-plus"></i></button>
+        </div>
+      </div>
+      <br>
+      <div id="table_tt" class="row"></div>
 
       <div class="row">
         {% for mp in mps %}
           <div class="col-md-6">
-            <h2 class="page-header">{{mp.trimestre.parentId}}</h2>
+            <div class="d-flex justify-content-between">
+              <h3 class="page-header">{{mp.trimestre.subestructura.nombre}} {{mp.trimestre.nombre}}</h3>
+              <a href="javascript:void(0);" class="text-danger btn-delete"><i class="fas fa-trash-alt"></i></a>
+            </div>
+
             <table class="table table-hover">
               <input type="hidden" name="tt[]" value="{{mp.trimestre.parentId.pk}}">
+              <input type="hidden" name="mps_pk[]" value="{{mp.secciones}}">
               <thead>
                 <tr>
                   <th>Unidad Curricular</th>
@@ -84,4 +132,103 @@
   </div>
 {% endblock %}
 
-{% block javascript %}{% endblock %}
+{% block javascript %}
+<script>
+  $(".btn-delete").click(function () {
+    $(this).parents('.col-md-6').remove()
+  });
+
+  $("#id_malla").change(function () {
+    let malla = $(this).val();
+    $.ajax({
+      url: '/ajax/trayecto/',
+      data: {
+        'malla': malla
+      },
+      dataType: 'json',
+      success: function (data) {
+        if (data.status) {
+          let select = '<option value="">Selecciona un Trayecto</option>'
+          for(i in data.results){
+            select += `<option value="${data.results[i].pk}">${data.results[i].nombre}</option>`
+            $("#id_subestructura").html(select)
+          }
+        }
+      }
+    });
+  });
+
+  $("#id_subestructura").change(function () {
+    let trayecto = $(this).val();
+    $.ajax({
+      url: '/ajax/trimestre/',
+      data: {
+        'trayecto': trayecto
+      },
+      dataType: 'json',
+      success: function (data) {
+        if (data.status) {
+          let select = '<option value="">Selecciona un Trimestre</option>'
+          for(i in data.results){
+            select += `<option value="${data.results[i].pk}">${data.results[i].nombre}(${data.results[i].codigo})</option>`
+            $("#id_sub_subestructura").html(select)
+          }
+        }
+      }
+    });
+  });
+
+  $("#addPlanificacion").click(function () {
+    let trimestre = $("#id_sub_subestructura").val();
+    let secciones = $("#id_secciones").val();
+    sub_sub_estructura = $("#id_sub_subestructura").text()
+    $.ajax({
+      url: '/ajax/malla/',
+      data: {
+        'trimestre': trimestre
+      },
+      dataType: 'json',
+      success: function (data) {
+
+        if (data.status) {
+          table_tt = `<div class="col-md-6">
+            <div class="table-responsive">
+            <div class="d-flex justify-content-between">
+              <h3 class="page-header">
+                ${data.sub_sub_estructura}
+              </h3>
+              <a href="javascript:void(0);" class="text-danger btn-delete"><i class="fas fa-trash-alt"></i></a>
+            </div>
+
+              <input type="hidden" name="tt[]" value="${trimestre}">
+              <input type="hidden" name="mps_pk[]" value="${secciones}">
+
+              <table class="table table-hover table-sm">
+                <thead>
+                  <tr>
+                    <th scope="col">Unidad Curricular</th>
+                    <th scope="col">Nº Hra.</th>
+                    <th scope="col">Nº Secc.</th>
+                    <th scope="col">Total Hra.</th>
+                  </tr>
+                </thead>
+                <tbody>`
+                  for(i in data.results){
+                    table_tt += `<tr>
+                      <td>${data.results[i].unidad_credito}</td>
+                      <td>${data.results[i].horas}</td>
+                      <td>${secciones}</td>
+                      <td></td>
+                    </tr>`
+                  }
+                table_tt += `</tbody>
+              </table>
+            </div>
+          </div>`
+          $("#table_tt").append(table_tt);
+        }
+      }
+    });
+  });
+</script>
+{% endblock %}

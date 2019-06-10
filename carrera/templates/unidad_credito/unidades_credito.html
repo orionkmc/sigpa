@@ -110,7 +110,7 @@
       e.preventDefault();
       a = confirm('¿Estas seguro que deseas eliminar esta Unidad Curricular?')
       if (a) {
-        $("form").submit();  
+        $(this).parent('form').submit();
       }
     });
   });

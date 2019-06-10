@@ -17,6 +17,9 @@ class Periodo(models.Model):
     def __str__(self):
         return self.codigo
 
+    class Meta:
+        ordering = ('-pk', )
+
 
 class MallaUCEPeriodo(models.Model):
     periodo = models.ForeignKey(Periodo, null=True, on_delete=models.SET_NULL)
@@ -36,7 +39,7 @@ class Seccion(models.Model):
     codigo = models.CharField(u'Codigo', max_length=20)
     nombre = models.CharField(u'Nombre', max_length=200)
     turno = models.CharField(
-        u'Tipo', max_length=20, choices=TURNO_CHOICES, null=True, blank=False,
+        u'Turno', max_length=20, choices=TURNO_CHOICES, null=True, blank=False,
         default='Diurno')
     multiplicador = models.FloatField(
         "Multiplicador", default=0, null=True, blank=True)

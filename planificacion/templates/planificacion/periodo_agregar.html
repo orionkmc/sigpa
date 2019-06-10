@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block planificacion_display %}display: block;{% endblock %}
-{% block planificacion_active %}link-current{% endblock %}
+{% block periodos_active %}link-current{% endblock %}
 
 {% block content %}
     <!-- one box -->
@@ -106,6 +106,10 @@
 
 {% block javascript %}
 <script>
+  $(document).on('click', '.btn-delete', function(){
+    $(this).parents('.col-md-6').remove()
+  });
+
   $("#id_malla").change(function () {
     let malla = $(this).val();
     $.ajax({
@@ -150,7 +154,6 @@
     let trimestre = $("#id_sub_subestructura").val();
     let secciones = $("#id_secciones").val();
     sub_sub_estructura = $("#id_sub_subestructura").text()
-    console.log(secciones)
     $.ajax({
       url: '/ajax/malla/',
       data: {
@@ -160,9 +163,14 @@
       success: function (data) {
 
         if (data.status) {
-          table_tt = `<div class="col-12">
+          table_tt = `<div class="col-md-6">
             <div class="table-responsive">
-              <h3 class="page-header text-center">${data.sub_sub_estructura}</h3>
+            <div class="d-flex justify-content-between">
+              <h3 class="page-header">
+                ${data.sub_sub_estructura}
+              </h3>
+              <a href="javascript:void(0);" class="text-danger btn-delete"><i class="fas fa-trash-alt"></i></a>
+            </div>
 
               <input type="hidden" name="secciones[]" value="${secciones}">
               <input type="hidden" name="tt[]" value="${trimestre}">

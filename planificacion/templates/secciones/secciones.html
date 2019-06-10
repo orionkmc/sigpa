@@ -14,7 +14,7 @@
           <h3 class="page-header">
             {{mp.trimestre.subestructura.nombre}}-{{mp.trimestre.nombre}}({{mp.trimestre}})
             <a
-              href="#"
+              href="{% url 'seccion_add' mp.periodo.pk mp.pk %}"
               class="btn-sm text-success"
               data-toggle="tooltip"
               data-placement="top"
@@ -60,16 +60,19 @@
                         <i class="fas fa-edit"></i>
                       </span>
                     </a>
-                    <a
-                      href="#"
-                      class="btn btn-outline-danger btn-sm"
-                      data-toggle="tooltip"
-                      data-placement="top"
-                      title="Eliminar Sección">
-                      <span class="list-icon">
-                        <i class="fas fa-trash"></i>
-                      </span>
-                    </a>
+                    <form action="" method="POST" class="d-inline">
+                      {% csrf_token %}
+                      <input type="hidden" name="seccion" value="{{ sec.pk }}">
+                      <button
+                        class="btn-delete btn btn-outline-danger btn-sm"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Eliminar Sección">
+                        <span class="list-icon">
+                          <i class="fas fa-trash"></i>
+                        </span>
+                      </button>
+                    </form>
                   </td>
                 </tr>
               {% empty %}

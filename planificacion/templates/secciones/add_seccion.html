@@ -1,0 +1,26 @@
+{% extends 'layouts.html' %}
+{% load static %}
+
+{% block planificacion_display %}display: block;{% endblock %}
+{% block periodos_active %}link-current{% endblock %}
+
+{% block content %}
+  <div class="content-box mb-3">
+    <h1>Agregar Sección</h1>
+    <h3 class="page-header">Periodo Academico {{periodo.nombre}} ({{mp.trimestre}})</h3>
+    <br>
+    <div class="row">
+      <div class="col-12">
+        <form action="" method="POST">
+          {% csrf_token %}
+          {{seccion_form.as_table}}
+          <br>
+          <input class="btn btn-primary btn-block" type="submit" value="Guardar">
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
