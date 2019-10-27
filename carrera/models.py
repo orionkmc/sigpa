@@ -1,7 +1,8 @@
 from django.db import models
+from audit.mixins import AuditMixin
 
 
-class UnidadCurricular(models.Model):
+class UnidadCurricular(AuditMixin, models.Model):
     nombre = models.CharField(u'Nombre', max_length=200)
     uni_credi = models.CharField(u'Unidad de Credito', max_length=10)
     codigo = models.CharField(u'codigo', max_length=10, unique=True)
