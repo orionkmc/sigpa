@@ -22,7 +22,9 @@ class Periodo(models.Model):
 
 
 class MallaUCEPeriodo(models.Model):
-    periodo = models.ForeignKey(Periodo, on_delete=models.CASCADE)
+    periodo = models.ForeignKey(
+        Periodo, on_delete=models.CASCADE,
+        related_name="malla_periodo_p")
     trimestre = models.ForeignKey(
         SubSubEstructura, null=True, on_delete=models.SET_NULL)
     secciones = models.IntegerField(u'secciones')

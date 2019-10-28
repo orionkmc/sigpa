@@ -7,9 +7,9 @@
 {% block content %}
   <!-- one box -->
   <div class="content-box mb-3">
-    <h1 class="page-header">Periodo Academico {{periodo.nombre}}</h1>
+    <h1 class="page-header">Periodo Academico {{object.nombre}}</h1>
     <div class="row">
-      {% for mp in mps %}
+      {% for mp in object.malla_periodo_p.all %}
         <div class="col-md-4">
           <h2 class="page-header">{{mp.trimestre}}</h2>
           <table class="table table-hover">

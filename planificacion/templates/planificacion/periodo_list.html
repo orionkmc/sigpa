@@ -38,7 +38,7 @@
           </tr>
         </tfoot>
         <tbody>
-          {% for periodo in periodos %}
+          {% for periodo in object_list %}
             <tr>
               <td>{{ periodo.codigo }}</td>
               <td>{{ periodo.nombre }}</td>
@@ -64,7 +64,7 @@
                   </span>
                 </a>
                 <a
-                  href="{% url 'planificacion:periodo_nuevo_auto' periodo.pk %}"
+                  href="{% url 'planificacion:periodo' %}?periodo={{ periodo.pk }}"
                   class="btn btn-outline-danger btn-sm"
                   data-toggle="tooltip"
                   data-placement="top"

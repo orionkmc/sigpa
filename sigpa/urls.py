@@ -6,12 +6,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.decorators import login_required
+from django.views.generic import TemplateView
 
 # Views
 from planificacion import views as views_planificacion
 
 urlpatterns = [
-    path('', login_required(views_planificacion.home), name='home'),
+    path('', TemplateView.as_view(template_name="dashboard.html")),
+
     path('admin/', admin.site.urls),
 
     # Docentes
