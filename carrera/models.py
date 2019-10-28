@@ -58,7 +58,7 @@ class MallaUCE(models.Model):
         Malla, null=True, on_delete=models.SET_NULL)
     sub_sub_estructura = models.ForeignKey(
         SubSubEstructura, null=True, on_delete=models.SET_NULL,
-        related_name="malla_uce_sub_sub_estructura")
+        related_name="malla_uce_ss_estruct")
     unidad_credito = models.ForeignKey(
         UnidadCurricular, null=True, on_delete=models.SET_NULL,
         related_name="malla_unidad_credito")

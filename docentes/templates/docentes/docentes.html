@@ -35,7 +35,7 @@
             <tr>
               <th colspan="4" class="text-center">
                 <a
-                  href="{% url 'docente_add' %}"
+                  href="{% url 'docentes:docente_add' %}"
                   class="text-danger"
                   data-toggle="tooltip"
                   data-placement="top"
@@ -55,7 +55,7 @@
                 <td>{{docente.apellido}}</td>
                 <td class="text-center">
                   <a
-                    href="#"
+                    href="{% url 'docentes:docente-detail' docente.pk %}"
                     class="btn btn-outline-danger btn-sm"
                     data-toggle="tooltip"
                     data-placement="top"
@@ -65,7 +65,7 @@
                     </span>
                   </a>
                   <a
-                    href="{% url 'docente_edit' docente.pk %}"
+                    href="{% url 'docentes:docente_edit' docente.pk %}"
                     class="btn btn-outline-danger btn-sm"
                     data-toggle="tooltip"
                     data-placement="top"
@@ -95,6 +95,7 @@
       </div>
     </div>
   </div>
+
 {% endblock %}
 
 {% block javascript %}

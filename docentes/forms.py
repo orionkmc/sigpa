@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.forms import ModelForm
 from docentes.models import Docentes
+from django.forms import formset_factory
 
 
 class DocenteForm(ModelForm):
@@ -13,3 +14,5 @@ class DocenteForm(ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs['class'] =\
                 'form-control form-control-sm'
+
+DocenteFormSet = formset_factory(DocenteForm, extra=2)

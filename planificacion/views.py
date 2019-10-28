@@ -57,12 +57,22 @@ class PlanificacionView(View):
                     trimestre=sse, periodo=p, secciones=seccion)
                 mucep.save()
                 for x in range(0, int(seccion)):
-                    print(x)
+                    codigo = "{}-{}-{}".format(
+                        request.POST.get('codigo'),
+                        sse,
+                        SECCION_CHOICES[x]
+                    )
                     s = Seccion(
-                        codigo=SECCION_CHOICES[x],
+                        codigo=codigo,
                         nombre=SECCION_CHOICES[x],
                         periodo=mucep)
                     s.save()
+                    malla_uce = mucep.trimestre.malla_uce_ss_estruct.all()
+                    for x in malla_uce:
+                        SeccionPeriodo(
+                            seccion=s,
+                            unidad_curricular=x.unidad_credito,
+                        ).save()
             periodo_form = PeriodoForm()
         context = {
             'periodo_form': periodo_form,
@@ -108,12 +118,13 @@ class PeriodoNuevoView(View):
         periodo_form = PeriodoForm()
         malla_form = MallaForm()
         periodo = Periodo.objects.get(pk=periodo)
+        print(periodo)
         mps = MallaUCEPeriodo.objects.filter(periodo=periodo)
         context = {
-            'mps': mps,
-            'periodo': periodo,
             'periodo_form': periodo_form,
             'malla_form': malla_form,
+            'periodo': periodo,
+            'mps': mps,
         }
         return render(request, 'planificacion/periodo_nuevo.html', context)
 
@@ -126,17 +137,29 @@ class PeriodoNuevoView(View):
             tt = request.POST.getlist('tt[]')
             mps_pk = request.POST.getlist('mps_pk[]')
             p = periodo_form.save()
+
             for idx, mp in enumerate(mps_pk):
                 sse = SubSubEstructura.objects.get(pk=tt[idx])
                 mucep = MallaUCEPeriodo(
                     trimestre=sse, periodo=p, secciones=mp)
                 mucep.save()
                 for x in range(0, int(mp)):
+                    codigo = "{}-{}-{}".format(
+                        request.POST.get('codigo'),
+                        sse,
+                        SECCION_CHOICES[x]
+                    )
                     s = Seccion(
-                        codigo=SECCION_CHOICES[x],
+                        codigo=codigo,
                         nombre=SECCION_CHOICES[x],
                         periodo=mucep)
                     s.save()
+                    malla_uce = mucep.trimestre.malla_uce_ss_estruct.all()
+                    for x in malla_uce:
+                        SeccionPeriodo(
+                            seccion=s,
+                            unidad_curricular=x.unidad_credito,
+                        ).save()
 
             periodo_form = PeriodoForm()
         context = {

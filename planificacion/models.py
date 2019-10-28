@@ -22,7 +22,7 @@ class Periodo(models.Model):
 
 
 class MallaUCEPeriodo(models.Model):
-    periodo = models.ForeignKey(Periodo, null=True, on_delete=models.SET_NULL)
+    periodo = models.ForeignKey(Periodo, on_delete=models.CASCADE)
     trimestre = models.ForeignKey(
         SubSubEstructura, null=True, on_delete=models.SET_NULL)
     secciones = models.IntegerField(u'secciones')
@@ -36,7 +36,7 @@ class MallaUCEPeriodo(models.Model):
 
 
 class Seccion(models.Model):
-    codigo = models.CharField(u'Codigo', max_length=20)
+    codigo = models.CharField(u'Codigo', max_length=20, unique=True)
     nombre = models.CharField(u'Nombre', max_length=200)
     turno = models.CharField(
         u'Turno', max_length=20, choices=TURNO_CHOICES, null=True, blank=False,
@@ -45,17 +45,16 @@ class Seccion(models.Model):
         "Multiplicador", default=0, null=True, blank=True)
     grupos = models.BooleanField("Grupos", default=False)
     periodo = models.ForeignKey(
-        MallaUCEPeriodo, null=True, on_delete=models.SET_NULL,
+        MallaUCEPeriodo, on_delete=models.CASCADE,
         related_name="seccion_malla_periodo")
 
     def __str__(self):
-        return self.nombre
+        return self.codigo
 
 
 class SeccionPeriodo(models.Model):
-    seccion = models.ForeignKey(
-        Seccion, on_delete=models.SET_NULL, null=True)
+    seccion = models.ForeignKey(Seccion, on_delete=models.CASCADE)
     docentes = models.ForeignKey(
-        Docentes, on_delete=models.SET_NULL, null=True)
+        Docentes, on_delete=models.SET_NULL, null=True, blank=True)
     unidad_curricular = models.ForeignKey(
         UnidadCurricular, on_delete=models.SET_NULL, null=True)

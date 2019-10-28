@@ -1,8 +1,15 @@
 from django.shortcuts import render
 from django.views.generic import View
-from carrera.models import UnidadCurricular, Malla, Subestructura, SubSubEstructura, MallaUCE
+# from django.forms.models import inlineformset_factory
+from django.views.generic.detail import DetailView
+
+from carrera.models import UnidadCurricular, Malla, Subestructura
 from carrera.forms import UnidadCurricularForm, MallaForm, MallauceForm
-from django.forms.models import inlineformset_factory
+
+
+class UnidadCurricularDetailView(DetailView):
+    model = UnidadCurricular
+    template_name = 'u_curricular/detail_u_curricular.html'
 
 
 class UnidadesCurricularesView(View):
@@ -11,7 +18,9 @@ class UnidadesCurricularesView(View):
         context = {
             'unidades_curriculares': unidades_curriculares,
         }
-        return render(request, 'unidad_credito/unidades_credito.html', context)
+        return render(
+            request,
+            'u_curricular/u_curriculares.html', context)
 
     def post(self, request):
         alert = False
@@ -28,7 +37,9 @@ class UnidadesCurricularesView(View):
             'unidades_curriculares': unidades_curriculares,
             'alert': alert,
         }
-        return render(request, 'unidad_credito/unidades_credito.html', context)
+        return render(
+            request,
+            'u_curricular/u_curriculares.html', context)
 
 
 class AddUnidadCurricularView(View):
@@ -38,7 +49,7 @@ class AddUnidadCurricularView(View):
             'unidad_curricular_form': unidad_curricular_form,
         }
         return render(
-            request, 'unidad_credito/add_unidad_credito.html', context)
+            request, 'u_curricular/add_u_curricular.html', context)
 
     def post(self, request):
         unidad_curricular_form = UnidadCurricularForm(request.POST)
@@ -51,7 +62,7 @@ class AddUnidadCurricularView(View):
             'alert': alert,
         }
         return render(
-            request, 'unidad_credito/add_unidad_credito.html', context)
+            request, 'u_curricular/add_u_curricular.html', context)
 
 
 class EditUnidadCurricularView(View):
@@ -62,7 +73,7 @@ class EditUnidadCurricularView(View):
             'unidad_curricular_form': unidad_curricular_form,
         }
         return render(
-            request, 'unidad_credito/edit_unidad_credito.html', context)
+            request, 'u_curricular/edit_u_curricular.html', context)
 
     def post(self, request, uc):
         alert = False
@@ -78,7 +89,7 @@ class EditUnidadCurricularView(View):
             'alert': alert,
         }
         return render(
-            request, 'unidad_credito/edit_unidad_credito.html', context)
+            request, 'u_curricular/edit_u_curricular.html', context)
 
 
 class MallasView(View):
@@ -104,7 +115,8 @@ class MallasView(View):
             'unidades_curriculares': unidades_curriculares,
             'alert': alert,
         }
-        return render(request, 'unidad_credito/unidades_credito.html', context)
+        return render(
+            request, 'u_curricular/u_curriculares.html', context)
 
 
 class AddMallaView(View):
@@ -150,15 +162,15 @@ class EditMallaView(View):
     def post(self, request, malla):
         malla = Malla.objects.get(pk=malla)
 
-        MallauceFormFormSet = inlineformset_factory(
-            SubSubEstructura, MallaUCE, extra=0, can_delete=True)
+        # MallauceFormFormSet = inlineformset_factory(
+        #     SubSubEstructura, MallaUCE, extra=0, can_delete=True)
 
         malla_form = MallaForm(request.POST, instance=malla)
 
-        if malla_form.is_valid():
-            m = malla_form.save()
-        mallauce_form_form_set = MallauceFormFormSet(request.POST, instance=m)
-        print(mallauce_form_form_set)
+        # if malla_forXmalla_form.save()
+        # mallauce_form_form_set = MallauceFormFormSet(
+        #     request.POST, instance=m)
+        # print(mallauce_form_form_set)
         # print(mallauce_form_form_set)
         # if mallauce_form_form_set.is_valid():
         #     print(mallauce_form_form_set)

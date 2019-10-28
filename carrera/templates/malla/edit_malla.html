@@ -53,7 +53,7 @@
                           </div>
                           <div id="collapseTT{{tt.pk}}" class="collapse" aria-labelledby="Trayecto{{tt.pk}}">
                             <div class="card-body px-1 py-0">
-                              {% for x in tt.malla_uce_sub_sub_estructura.all %}
+                              {% for x in tt.malla_uce_ss_estruct.all %}
                                 <div class="border-bottom p-3">
                                   <h3 style="font-size: 14px;"><strong>{{x.unidad_credito.nombre}}({{x.unidad_credito.codigo}})</strong></h3>
                                   <input type="hidden" name="mallauce_pk" value="{{x.pk}}">
@@ -77,7 +77,7 @@
                               {% endfor %}
                               <div class="text-center p-2">
                                 <a
-                                  href="{% url 'malla_add' %}"
+                                  href="{% url 'carrera:malla_add' %}"
                                   class="text-danger"
                                   data-toggle="tooltip"
                                   data-placement="top"

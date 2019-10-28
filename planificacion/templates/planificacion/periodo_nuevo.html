@@ -98,33 +98,35 @@
 
       <div class="row">
         {% for mp in mps %}
-          <div class="col-md-6">
-            <div class="d-flex justify-content-between">
-              <h3 class="page-header">{{mp.trimestre.subestructura.nombre}} {{mp.trimestre.nombre}}</h3>
-              <a href="javascript:void(0);" class="text-danger btn-delete"><i class="fas fa-trash-alt"></i></a>
-            </div>
+          {% if mp.trimestre.parentId %}
+            <div class="col-md-6">
+              <div class="d-flex justify-content-between">
+                <h3 class="page-header">{{mp.trimestre.parentId.subestructura.nombre}} {{mp.trimestre.parentId.nombre}}</h3>
+                <a href="javascript:void(0);" class="text-danger btn-delete"><i class="fas fa-trash-alt"></i></a>
+              </div>
 
-            <table class="table table-hover">
-              <input type="hidden" name="tt[]" value="{{mp.trimestre.parentId.pk}}">
-              <input type="hidden" name="mps_pk[]" value="{{mp.secciones}}">
-              <thead>
-                <tr>
-                  <th>Unidad Curricular</th>
-                  <th>Nº Hora</th>
-                  <th>Nº Sección</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for a in mp.trimestre.parentId.malla_uce_sub_sub_estructura.all %}
+              <table class="table table-hover">
+                <input type="hidden" name="tt[]" value="{{mp.trimestre.parentId.pk}}">
+                <input type="hidden" name="mps_pk[]" value="{{mp.secciones}}">
+                <thead>
                   <tr>
-                    <td>{{a.unidad_credito.nombre}}</td>
-                    <td>{{a.horas_total}}</td>
-                    <td>{{mp.secciones}}</td>
+                    <th>Unidad Curricular</th>
+                    <th>Nº Hora</th>
+                    <th>Nº Sección</th>
                   </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {% for a in mp.trimestre.parentId.malla_uce_ss_estruct.all %}
+                    <tr>
+                      <td>{{a.unidad_credito.nombre}}</td>
+                      <td>{{a.horas_total}}</td>
+                      <td>{{mp.secciones}}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% endif %}
         {% endfor %}
       </div>
       <input class="btn btn-primary btn-block" type="submit" value="Guardar">

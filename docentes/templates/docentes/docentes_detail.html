@@ -1,0 +1,100 @@
+{% extends 'layouts.html' %}
+{% load static %}
+
+{% block docentes_display %}display: block;{% endblock %}
+{% block docentes_active %}link-current{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'dist/data_tables/css/dataTables.bootstrap4.css' %}">
+  <style>
+    #profile-info .shaded {
+        background: rgb(249, 249, 249);
+    }
+
+    #profile-info .profile-label {
+        font-weight: bold;
+        font-size: 15px;
+        margin-right: 10px;
+    }
+    .profile-col-right {
+        margin-left: 20px;
+    }
+    h2{
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="content-box">
+    <h2>Información del Docente {{ object.nombre }}</h2>
+    <div class="row">
+      <div class="col-md-3">
+        <div class="d-flex justify-content-center align-items-center h-100 w-100" style="background: gray;">
+          Foto del docente
+        </div>
+      </div>
+      <div class="col-md-8 profile-col-right">
+        <div id="profile-info">
+
+          <div class="row shaded" id="trade_volume_row">
+            <div class="col-md-5 profile-label">Cedula</div>
+            <div class="col-md-6 profile-value">{{ object.cedula }}</div>
+          </div>
+
+          <div class="row" id="confirmed_trades_row">
+            <div class="col-md-5 profile-label">Nombre</div>
+            <div class="col-md-6 profile-value">{{ object.nombre }}</div>
+          </div>
+
+          <div class="row shaded" id="trade_volume_row">
+            <div class="col-md-5 profile-label">apellido</div>
+            <div class="col-md-6 profile-value">{{ object.apellido }}</div>
+          </div>
+
+          <div class="row" id="confirmed_trades_row">
+            <div class="col-md-5 profile-label">direccion</div>
+            <div class="col-md-6 profile-value">{{ object.direccion }}</div>
+          </div>
+
+          <div class="row shaded" id="trade_volume_row">
+            <div class="col-md-5 profile-label">dedicacion</div>
+            <div class="col-md-6 profile-value">{{ object.get_dedicacion_display }}</div>
+          </div>
+
+          <div class="row" id="confirmed_trades_row">
+            <div class="col-md-5 profile-label">categoria</div>
+            <div class="col-md-6 profile-value">{{ object.categoria }}</div>
+          </div>
+
+          <div class="row shaded" id="trade_volume_row">
+            <div class="col-md-5 profile-label">status</div>
+            <div class="col-md-6 profile-value">{{ object.status }}</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <br>
+    
+    <div class="row d-none d-md-block">
+      <div class="col-md-12 d-flex justify-content-end">
+        <a class="btn btn-primary" href="{% url 'docentes:docentes' %}">Volver</a>
+        <a class="btn btn-primary mx-2" href="{% url 'docentes:docente_edit' object.pk %}">Editar</a>
+        <a class="btn btn-primary" href="{% url 'docentes:docente_add' %}">Agregar otro Docente</a>
+      </div>
+    </div>
+
+    <div class="row d-md-none">
+      <div class="col-md-12">
+        <a class="btn btn-primary btn-block" href="{% url 'docentes:docentes' %}">Volver</a>
+        <a class="btn btn-primary btn-block" href="{% url 'docentes:docente_edit' object.pk %}">Editar</a>
+        <a class="btn btn-primary btn-block" href="{% url 'docentes:docente_add' %}">Agregar otro Docente</a>
+      </div>
+    </div>
+
+  </div>
+{% endblock %}
+
+{% block javascript %}{% endblock %}
