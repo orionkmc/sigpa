@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
-from planificacion.forms import DocenteForm, SeccionForm
-from carrera.models import MallaUCE, UnidadCurricular
-from docentes.models import Docentes
+from planificacion.forms import SeccionForm, SeccionPeriodoFormSet
+from carrera.models import MallaUCE
 from planificacion.models import MallaUCEPeriodo, Periodo, Seccion,\
     SeccionPeriodo
 # # # # # # # # # # # # # # # # # # # # # # # #
@@ -73,12 +72,13 @@ class SeccionView(View):
         seccion = Seccion.objects.get(pk=seccion)
         muce = MallaUCE.objects.filter(
             sub_sub_estructura=seccion.periodo.trimestre)
-        docentes = DocenteForm()
+        seccion_periodo_form = SeccionPeriodoFormSet(instance=seccion)
 
         context = {
             'seccion': seccion,
             'muce': muce,
-            'docentes': docentes
+            'seccion_periodo_form': seccion_periodo_form,
+
         }
         return render(request, 'secciones/seccion.html', context)
 
@@ -86,24 +86,16 @@ class SeccionView(View):
         seccion = Seccion.objects.get(pk=seccion)
         muce = MallaUCE.objects.filter(
             sub_sub_estructura=seccion.periodo.trimestre)
+        seccion_periodo_form = SeccionPeriodoFormSet(
+            request.POST, instance=seccion
+        )
+        if seccion_periodo_form.is_valid():
+            seccion_periodo_form.save()
 
-        docentes = DocenteForm(request.POST)
-        if docentes.is_valid():
-            ucs = request.POST.getlist('uc[]')
-            d = request.POST.getlist('docente')
-
-            for idx, uc in enumerate(ucs):
-                docente = Docentes.objects.get(pk=d[idx])
-                unidad_curricular = UnidadCurricular.objects.get(pk=uc)
-                sp = SeccionPeriodo(
-                    seccion=seccion,
-                    docentes=docente,
-                    unidad_curricular=unidad_curricular)
-                sp.save()
         context = {
             'seccion': seccion,
             'muce': muce,
-            'docentes': docentes
+            'seccion_periodo_form': seccion_periodo_form,
         }
         return render(request, 'secciones/seccion.html', context)
 

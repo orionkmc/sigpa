@@ -12,6 +12,7 @@
       <div class="col-12">
         <form action="" method="POST">
           {% csrf_token %}
+          {{ seccion_periodo_form.management_form }}
           <table class="table table-hover table-sm">
             <thead>
               <tr>
@@ -36,14 +37,15 @@
               </tr>
             </tfoot>
             <tbody>
-              {% for m in muce %}
+              {% for m in seccion_periodo_form %}
                 <tr>
-                  <td>
-                    {{m}}
-                    <input type="hidden" name="uc[]" value="{{m.unidad_credito.pk}}">
+                  <td width="50%">
+                    {{ m.unidad_curricular }}
                   </td>
-                  <td>
-                    {{docentes.docente}}
+                  <td width="50%">
+                    {{ m.docentes }}
+                    {{ m.seccion }}
+                    {{ m.id }}
                   </td>
                 </tr>
               {% endfor %}
@@ -54,6 +56,7 @@
       </div>
     </div>
   </div>
+
 {% endblock %}
 
 {% block javascript %}

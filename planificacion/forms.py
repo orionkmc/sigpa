@@ -4,6 +4,8 @@ from carrera.models import Malla
 from planificacion.models import Periodo, Seccion, TURNO_CHOICES
 from django.forms import ModelForm
 from docentes.models import Docentes
+from planificacion.models import SeccionPeriodo
+from django.forms.models import inlineformset_factory
 
 
 class SeccionForm(ModelForm):
@@ -86,8 +88,29 @@ class DocenteForm(forms.Form):
         queryset=Docentes.objects.all(),
         empty_label="Selecciona un Docente",
         widget=forms.Select(
-
             attrs={'class': 'form-control form-control-sm'},
         ),
         required=True
     )
+
+
+class SeccionPeriodoForm(ModelForm):
+    class Meta:
+        model = SeccionPeriodo
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(SeccionPeriodoForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+        self.fields[
+            'unidad_curricular'].widget.attrs['readonly'] = 'true'
+
+
+SeccionPeriodoFormSet = inlineformset_factory(
+    Seccion,
+    SeccionPeriodo,
+    form=SeccionPeriodoForm,
+    extra=0,
+    can_delete=False,
+)
