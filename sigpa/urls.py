@@ -12,7 +12,9 @@ from django.views.generic import TemplateView
 from planificacion import views as views_planificacion
 
 urlpatterns = [
-    path('', TemplateView.as_view(template_name="dashboard.html")),
+    path(
+        '',
+        login_required(TemplateView.as_view(template_name="dashboard.html"))),
 
     path('admin/', admin.site.urls),
 
