@@ -64,17 +64,18 @@ class MallaForm(forms.Form):
     malla = forms.ModelChoiceField(
         queryset=Malla.objects.all(),
         empty_label="Mallas Academicas",
+        required=False,
         widget=forms.Select(
             attrs={'class': 'form-control form-control-sm'},
         )
     )
     subestructura = forms.CharField(
-        label="Trayectos", widget=forms.Select(
+        label="Trayectos", required=False, widget=forms.Select(
             attrs={'class': 'form-control form-control-sm'},
             choices=CHOICES_SUBESTRUCTURA
         ))
     sub_subestructura = forms.CharField(
-        label="Trimestres", widget=forms.Select(
+        label="Trimestres", required=False, widget=forms.Select(
             attrs={'class': 'form-control form-control-sm'},
             choices=CHOICES_SUB_SUBESTRUCTURA
         ))

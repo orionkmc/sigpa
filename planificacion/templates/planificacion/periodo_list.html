@@ -25,7 +25,7 @@
           <tr>
             <th colspan="5" class="text-center">
               <a
-                href="{% url 'planificacion' %}"
+                href="{% url 'planificacion:periodo' %}"
                 class="text-danger"
                 data-toggle="tooltip"
                 data-placement="top"
@@ -38,7 +38,7 @@
           </tr>
         </tfoot>
         <tbody>
-          {% for periodo in periodos %}
+          {% for periodo in object_list %}
             <tr>
               <td>{{ periodo.codigo }}</td>
               <td>{{ periodo.nombre }}</td>
@@ -46,7 +46,7 @@
               <td>{{ periodo.fecha_fin }}</td>
               <td>
                 <a
-                  href="{% url 'periodo' periodo.pk %}"
+                  href="{% url 'planificacion:periodo' periodo.pk %}"
                   class="btn btn-outline-danger btn-sm"
                   data-toggle="tooltip"
                   data-placement="top"
@@ -64,7 +64,7 @@
                   </span>
                 </a>
                 <a
-                  href="{% url 'periodo_nuevo' periodo.pk %}"
+                  href="{% url 'planificacion:periodo' %}?periodo={{ periodo.pk }}"
                   class="btn btn-outline-danger btn-sm"
                   data-toggle="tooltip"
                   data-placement="top"
@@ -87,7 +87,9 @@
   <script>
     $(function () {
       $('[data-toggle="tooltip"]').tooltip();
-      $('.datatables').DataTable();
+      $('.datatables').DataTable({
+        "aaSorting": [[ 0, "desc" ]]
+      });
     });
   </script>
 {% endblock %}

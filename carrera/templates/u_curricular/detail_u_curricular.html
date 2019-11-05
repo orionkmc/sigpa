@@ -1,0 +1,82 @@
+{% extends 'layouts.html' %}
+{% load static %}
+
+{% block carrera_display %}display: block;{% endblock %}
+{% block uc_active %}link-current{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'dist/data_tables/css/dataTables.bootstrap4.css' %}">
+  <style>
+    #profile-info .shaded {
+        background: rgb(249, 249, 249);
+    }
+
+    #profile-info .profile-label {
+        font-weight: bold;
+        font-size: 15px;
+        margin-right: 10px;
+    }
+    .profile-col-right {
+        margin-left: 20px;
+    }
+    h2{
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="content-box">
+    <h2>Información de la Unidad curricular "{{ object.nombre }}"</h2>
+
+    <div class="row">
+      <div class="col-md-8 profile-col-right">
+        <div id="profile-info">
+
+          <div class="row shaded" id="trade_volume_row">
+            <div class="col-md-5 profile-label">Nombre</div>
+            <div class="col-md-6 profile-value">{{ object.nombre }}</div>
+          </div>
+
+          <div class="row" id="confirmed_trades_row">
+            <div class="col-md-5 profile-label">Unidades de Credito</div>
+            <div class="col-md-6 profile-value">{{ object.uni_credi }}</div>
+          </div>
+
+          <div class="row shaded" id="trade_volume_row">
+            <div class="col-md-5 profile-label">Codigo</div>
+            <div class="col-md-6 profile-value">{{ object.codigo }}</div>
+          </div>
+
+          <div class="row" id="confirmed_trades_row">
+            <div class="col-md-5 profile-label">Descripcion</div>
+            <div class="col-md-6 profile-value">{{ object.descripcion|default:"-" }}</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <br>
+    
+    <div class="row d-none d-md-block">
+      <div class="col-md-12 d-flex justify-content-end">
+        <a class="btn btn-primary" href="{% url 'carrera:ucurriculares' %}">Volver</a>
+        <a class="btn btn-primary mx-2" href="{% url 'carrera:ucurricular_edit' object.pk %}">Editar</a>
+        <a class="btn btn-primary" href="{% url 'carrera:ucurricular_add' %}">Agregar otra U. Curricular</a>
+      </div>
+    </div>
+
+    <div class="row d-md-none">
+      <div class="col-md-12">
+        <a class="btn btn-primary btn-block" href="{% url 'carrera:ucurriculares' %}">Volver</a>
+        <a class="btn btn-primary btn-block" href="{% url 'carrera:ucurricular_edit' object.pk %}">Editar</a>
+        <a class="btn btn-primary btn-block" href="{% url 'carrera:ucurricular_add' %}">Agregar otra U. Curricular</a>
+      </div>
+    </div>
+
+  </div>
+{% endblock %}
+
+{% block javascript %}{% endblock %}

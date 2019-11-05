@@ -2,12 +2,16 @@ from django.views.generic import View
 from django.shortcuts import render
 from docentes.models import Docentes
 from docentes.forms import DocenteForm
+from django.views.generic.detail import DetailView
+
+
+class DocenteDetailView(DetailView):
+    model = Docentes
 
 
 class DocentesView(View):
     def get(self, request):
         d = Docentes.objects.all()
-
         context = {
             'docentes': d,
         }

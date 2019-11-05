@@ -37,7 +37,7 @@
             <tr>
               <th colspan="4" class="text-center">
                 <a
-                  href="{% url 'ucurricular_add' %}"
+                  href="{% url 'carrera:ucurricular_add' %}"
                   class="text-danger"
                   data-toggle="tooltip"
                   data-placement="top"
@@ -57,7 +57,7 @@
                 <td>{{uc.uni_credi}}</td>
                 <td class="text-center">
                   <a
-                    href="#"
+                    href="{% url 'carrera:ucurricular-detail' uc.pk %}"
                     class="btn btn-outline-danger btn-sm"
                     data-toggle="tooltip"
                     data-placement="top"
@@ -67,7 +67,7 @@
                     </span>
                   </a>
                   <a
-                    href="{% url 'ucurricular_edit' uc.pk %}"
+                    href="{% url 'carrera:ucurricular_edit' uc.pk %}"
                     class="btn btn-outline-danger btn-sm"
                     data-toggle="tooltip"
                     data-placement="top"

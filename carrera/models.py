@@ -1,7 +1,8 @@
 from django.db import models
+from audit.mixins import AuditMixin
 
 
-class UnidadCurricular(models.Model):
+class UnidadCurricular(AuditMixin, models.Model):
     nombre = models.CharField(u'Nombre', max_length=200)
     uni_credi = models.CharField(u'Unidad de Credito', max_length=10)
     codigo = models.CharField(u'codigo', max_length=10, unique=True)
@@ -57,7 +58,7 @@ class MallaUCE(models.Model):
         Malla, null=True, on_delete=models.SET_NULL)
     sub_sub_estructura = models.ForeignKey(
         SubSubEstructura, null=True, on_delete=models.SET_NULL,
-        related_name="malla_uce_sub_sub_estructura")
+        related_name="malla_uce_ss_estruct")
     unidad_credito = models.ForeignKey(
         UnidadCurricular, null=True, on_delete=models.SET_NULL,
         related_name="malla_unidad_credito")
