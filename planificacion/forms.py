@@ -103,8 +103,6 @@ class SeccionPeriodoForm(ModelForm):
         super(SeccionPeriodoForm, self).__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
-        self.fields[
-            'unidad_curricular'].widget.attrs['readonly'] = 'true'
 
 
 SeccionPeriodoFormSet = inlineformset_factory(

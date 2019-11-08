@@ -57,6 +57,10 @@ class Seccion(models.Model):
 class SeccionPeriodo(models.Model):
     seccion = models.ForeignKey(Seccion, on_delete=models.CASCADE)
     docentes = models.ForeignKey(
-        Docentes, on_delete=models.SET_NULL, null=True, blank=True)
+        Docentes, on_delete=models.SET_NULL, null=True, blank=True,
+        related_name='seccion_periodo_docente')
     unidad_curricular = models.ForeignKey(
         UnidadCurricular, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return self.seccion.codigo

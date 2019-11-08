@@ -8,6 +8,7 @@ from carrera.models import SubSubEstructura
 from planificacion.models import MallaUCEPeriodo, Periodo, Seccion,\
     SeccionPeriodo
 # from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from docentes.models import Docentes
 
 SECCION_CHOICES = (
     ('A'), ('B'), ('C'), ('D'),
@@ -88,10 +89,18 @@ class PlanificacionView(View):
         }
         return render(request, 'planificacion/periodo_agregar.html', context)
 
-# class PlanificacionPlanillasView(View):
-#     def get(self, request):
-#         periodos = Periodo.objects.all()
-#         context = {
-#             'periodos': periodos
-#         }
-#         return render(request, 'planificacion/periodos.html', context)
+
+class PlanificacionPlanillasView(View):
+    def get(self, request, pk):
+        from django.db.models import Count
+
+        sp = SeccionPeriodo.objects.filter(seccion__periodo__periodo__pk=pk)
+
+        ds = Docentes.objects.annotate(
+            dcount=Count('pk')).filter(
+                seccion_periodo_docente__seccion__periodo__periodo__pk=pk)
+        return render(request, 'planificacion/planificacion.html', {
+            'pk_periodo': pk,
+            'sp': sp,
+            'ds': ds
+        })

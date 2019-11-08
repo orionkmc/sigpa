@@ -1,0 +1,56 @@
+{% extends 'layouts.html' %}
+{% load static %}
+{% load filter_tag %}
+
+
+{% block planificacion_display %}display: block;{% endblock %}
+{% block periodos_active %}link-current{% endblock %}
+
+{% block content %}
+  <div class="content-box mb-3">
+    <br>
+    <div class="row">
+      <div class="col-12">
+        <table width="100%" border="1">
+          <thead>
+            <tr>
+              <th>
+                DOCENTE/CEDULA <br>
+                TITULOS OBTENIDOS
+              </th>
+              <th>DED.</th>
+              <th>CAT.</th>
+              <th>UNIDAD CURRICULAR (ES)</th>
+              <th>SECCIONES</th>
+              <th>HORAS</th>
+              <th>HORAS SEMANALES</th>
+              <th>
+                TOTAL <br>
+                HOR. ACAD.
+              </th>
+              <th>OBSERVACIONES</th>
+            </tr>
+          </thead>
+          {% for x in ds %}
+            <tr>
+              <td>
+                {{ x.nombre }} <br>
+                {{ x.cedula }}
+              </td>
+              <td>{{ x.dedicacion }}</td>
+              <td>{{ x.categoria }}</td>
+              {% docente_periodo_seccion x.pk pk_periodo %}
+            </tr>
+          {% empty %}
+          <tr>
+            <th colspan="9" class="text-center">No hay docentes agregados</th>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}

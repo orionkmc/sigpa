@@ -1,0 +1,13 @@
+{% load filter_tag %}
+
+<td>
+  {% for x in sp %}
+    <div>{{ x.unidad_curricular }}</div>
+  {% endfor %}
+</td>
+
+<td>
+  {% for x in sp %}
+    <div>{{ x.seccion.nombre }}</div>
+  {% endfor %}
+</td>

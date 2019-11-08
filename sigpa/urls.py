@@ -49,11 +49,11 @@ urlpatterns = [
         name='seccion_ver'),
 
     # reportes
-    # path(
-    #     'planificacion/planillas',
-    #     login_required(
-    #         views_planificacion.PlanificacionPlanillasView.as_view()),
-    #     name='planificacion_planillas'),
+    path(
+        'planificacion/<int:pk>',
+        login_required(
+            views_planificacion.PlanificacionPlanillasView.as_view()),
+        name='planificacion_planillas'),
 
     # # PDF
     # path(
