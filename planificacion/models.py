@@ -38,7 +38,7 @@ class MallaUCEPeriodo(models.Model):
 
 
 class Seccion(models.Model):
-    codigo = models.CharField(u'Codigo', max_length=20, unique=True)
+    codigo = models.CharField(u'Codigo', max_length=50, unique=True)
     nombre = models.CharField(u'Nombre', max_length=200)
     turno = models.CharField(
         u'Turno', max_length=20, choices=TURNO_CHOICES, null=True, blank=False,
