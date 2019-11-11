@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from planificacion.forms import SeccionForm, SeccionPeriodoFormSet
-from carrera.models import MallaUCE
+from carrera.models import MallaUCE, UnidadCurricular
 from planificacion.models import MallaUCEPeriodo, Periodo, Seccion,\
     SeccionPeriodo
+from docentes.models import Docentes
 # # # # # # # # # # # # # # # # # # # # # # # #
 #                 SECCIONES                   #
 # # # # # # # # # # # # # # # # # # # # # # # #
@@ -73,12 +74,12 @@ class SeccionView(View):
         muce = MallaUCE.objects.filter(
             sub_sub_estructura=seccion.periodo.trimestre)
         seccion_periodo_form = SeccionPeriodoFormSet(instance=seccion)
-
         context = {
             'seccion': seccion,
             'muce': muce,
             'seccion_periodo_form': seccion_periodo_form,
-
+            'docentes': Docentes.objects.all(),
+            'unidadesC': UnidadCurricular.objects.all(),
         }
         return render(request, 'secciones/seccion.html', context)
 
@@ -86,16 +87,25 @@ class SeccionView(View):
         seccion = Seccion.objects.get(pk=seccion)
         muce = MallaUCE.objects.filter(
             sub_sub_estructura=seccion.periodo.trimestre)
-        seccion_periodo_form = SeccionPeriodoFormSet(
-            request.POST, instance=seccion
-        )
-        if seccion_periodo_form.is_valid():
-            seccion_periodo_form.save()
 
+        if request.POST.get('seccion_periodo'):
+            d = SeccionPeriodo.objects.get(
+                pk=request.POST.get('seccion_periodo'))
+            d.delete()
+            seccion_periodo_form = SeccionPeriodoFormSet(instance=seccion)
+        else:
+            seccion_periodo_form = SeccionPeriodoFormSet(
+                request.POST, instance=seccion
+            )
+            if seccion_periodo_form.is_valid():
+                for form in seccion_periodo_form:
+                    form.save()
         context = {
             'seccion': seccion,
             'muce': muce,
             'seccion_periodo_form': seccion_periodo_form,
+            'docentes': Docentes.objects.all(),
+            'unidadesC': UnidadCurricular.objects.all(),
         }
         return render(request, 'secciones/seccion.html', context)
 

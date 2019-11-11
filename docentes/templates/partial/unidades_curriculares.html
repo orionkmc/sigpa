@@ -1,13 +1,34 @@
 {% load filter_tag %}
-
-<td>
-  {% for x in sp %}
-    <div>{{ x.unidad_curricular }}</div>
-  {% endfor %}
-</td>
-
-<td>
-  {% for x in sp %}
-    <div>{{ x.seccion.nombre }}</div>
-  {% endfor %}
-</td>
+{% for x in sp %}
+  <tr>
+    {% if forloop.counter == 1 %}
+      <td rowspan="{{ sp|length }}" class="border-top-2">
+        {{ docente.nombre }} {{ docente.apellido }}<br>
+        C.I. {{ docente.cedula|default:"" }}
+      </td>
+      <td rowspan="{{ sp|length }}" class="border-top-2">{{ docente.dedicacion }}</td>
+      <td rowspan="{{ sp|length }}" class="border-top-2">{{ docente.categoria }}</td>  
+    {% endif %}
+    <td {% if forloop.last %}class="border-top-2"{% endif %}>
+      <div><a href="{% url 'seccion' x.seccion.periodo.periodo.pk x.seccion.pk %}" target="_blank">{{ x.unidad_curricular }}</a></div>
+    </td>
+    <td {% if forloop.last %}class="border-top-2"{% endif %}>
+      <div>{{ x.seccion.periodo.trimestre }} "{{ x.seccion.nombre }}"</div>
+    </td>
+    <td {% if forloop.last %}class="border-top-2"{% endif %}>
+      {{ x.horas_teoricas|floatformat:1 }}
+    </td>
+    <td {% if forloop.last %}class="border-top-2"{% endif %}>
+      {{ x.horas_practicas|floatformat:1 }}
+    </td>
+    <td {% if forloop.last %}class="border-top-2"{% endif %}>
+      {{ x.horas_semanales|floatformat:1 }}
+    </td>
+    {% if forloop.counter == 1 %}
+      <td rowspan="{{ sp|length }}" class="border-top-2">
+        {% total_horas_academicas sp %}
+      </td>
+      <td rowspan="{{ sp|length }}" class="border-top-2"></td>
+    {% endif %}
+  </tr>
+{% endfor %}

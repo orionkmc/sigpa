@@ -4,60 +4,177 @@
 {% block planificacion_display %}display: block;{% endblock %}
 {% block periodos_active %}link-current{% endblock %}
 
+{% block css %}
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+{% endblock %}
+
 {% block content %}
   <div class="content-box mb-3">
     <h1>Periodo Academico {{seccion.periodo.periodo}}, Sección "{{seccion}}", {{seccion.periodo}}</h1>
+
     <br>
     <div class="row">
       <div class="col-12">
-        <form action="" method="POST">
-          {% csrf_token %}
-          {{ seccion_periodo_form.management_form }}
-          <table class="table table-hover table-sm">
-            <thead>
-              <tr>
-                <th>Unidad Curricular</th>
-                <th>Docente</th>
-              </tr>
-            </thead>
-            <tfoot>
-              <tr>
-                <td colspan="2" class="text-center">
-                  <a
-                    href="#"
-                    class="btn btn-outline-light btn-block btn-sm text-danger"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title="Agregar Unidad Curricular">
-                    <span class="list-icon">
-                      <i class="fas fa-plus"></i>
-                    </span>
-                  </a>
+        <table class="table table-hover table-sm">
+          <thead>
+            <tr>
+              <th>Unidad Curricular</th>
+              <th>Docente</th>
+              <th>Horas Teoricas</th>
+              <th>Horas Practicas</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td colspan="5" class="text-center">
+                <a
+                  href="#"
+                  class="btn btn-outline-light btn-block btn-sm text-danger add-form-row"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Agregar Unidad Curricular">
+                  <span class="list-icon">
+                    <i class="fas fa-plus"></i>
+                  </span>
+                </a>
+              </td>
+            </tr>
+          </tfoot>
+          <tbody>
+            {% for m in seccion_periodo_form %}
+              <tr class="form-row-">
+                <td>{{ m.unidad_curricular }}</td>
+                <td>{{ m.docentes }}</td>
+                <td>{{ m.horas_teoricas }}</td>
+                <td>{{ m.horas_practicas }}</td>
+                <td>
+                  <form action="" method="POST" class="d-inline eliminar_uc">
+                    {% csrf_token %}
+                    <input type="hidden" name="seccion_periodo" value="{{ m.id.value }}">
+                    <button
+                      class="btn-delete btn btn-outline-danger btn-sm"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="Eliminar Unidad Curricular">
+                      <span class="list-icon">
+                        <i class="fas fa-trash"></i>
+                      </span>
+                    </button>
+                  </form>
                 </td>
               </tr>
-            </tfoot>
-            <tbody>
-              {% for m in seccion_periodo_form %}
-                <tr>
-                  <td width="50%">
-                    {{ m.unidad_curricular }}
-                  </td>
-                  <td width="50%">
-                    {{ m.docentes }}
-                    {{ m.seccion }}
-                    {{ m.id }}
-                  </td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+            {% endfor %}
+          </tbody>
+        </table>
+        <form id="save_seccion_periodo" action="" method="POST">
+          {% csrf_token %}
+          {{ seccion_periodo_form.management_form }}
+          {% for m in seccion_periodo_form %}
+            {{ m.seccion }}
+            {{ m.id }}
+          {% endfor %}
           <input class="btn btn-primary btn-block" type="submit" value="Guardar">
+          <a href="{% url 'secciones' seccion.periodo.periodo.pk %}" class="btn btn-primary btn-block">Volver</a>
         </form>
       </div>
     </div>
   </div>
-
+  <div id="docentes_option" class="d-none">
+    <option value="">---------</option>
+    {% for docente in docentes %}
+      <option value="{{ docente.pk }}">{{ docente.nombre }} {{ docente.apellido }}</option>
+    {% endfor %}
+  </div>
+  <div id="unidadesc_option" class="d-none">
+    <option value="">---------</option>
+    {% for unidadC in unidadesC %}
+      <option value="{{ unidadC.pk }}">{{ unidadC.nombre }}</option>
+    {% endfor %}
+  </div>
 {% endblock %}
 
 {% block javascript %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('.select2').select2();
+      $(".btn-delete").click(function (e) {
+        e.preventDefault();
+        a = confirm('¿Estas seguro que deseas eliminar esta unidad curricular?')
+        if (a) {
+          $(this).parent('.eliminar_uc').submit();  
+        }
+      });
+
+      $(document).on('click', '.btn-delete-2', function (e) {
+        $(this).parents('tr').remove()
+      });
+      function cloneMore(selector, prefix) {
+        var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
+        var newElement = `
+          <tr class="form-row-">
+            <td>
+              <select
+                name="seccionperiodo_set-${total}-unidad_curricular"
+                form="save_seccion_periodo"
+                class="form-control select2"
+                id="id_seccionperiodo_set-${total}-unidad_curricular">
+                ${$('#unidadesc_option').html()}
+              </select>
+            </td>
+            <td>
+              <select
+                name="seccionperiodo_set-${total}-docentes"
+                form="save_seccion_periodo"
+                class="form-control select2"
+                id="id_seccionperiodo_set-${total}-docentes">
+                ${$('#docentes_option').html()}
+              </select>
+            </td>
+            <td>
+              <input
+                type="number"
+                name="seccionperiodo_set-${total}-horas_teoricas"
+                value="0.0"
+                step="any"
+                form="save_seccion_periodo"
+                class="form-control form-control-sm"
+                id="id_seccionperiodo_set-${total}-horas_teoricas"></td>
+            <td>
+              <input
+                type="number"
+                name="seccionperiodo_set-${total}-horas_practicas"
+                value="0"
+                step="any"
+                form="save_seccion_periodo"
+                class="form-control form-control-sm"
+                id="id_seccionperiodo_set-${total}-horas_practicas">
+            </td>
+            <td>
+              <button
+                class="btn-delete-2 btn btn-outline-danger btn-sm"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Eliminar Unidad Curricular">
+                <span class="list-icon">
+                  <i class="fas fa-trash"></i>
+                </span>
+              </button>
+            </td>
+          </tr>`;
+        total++;
+        $('#id_' + prefix + '-TOTAL_FORMS').val(total);
+        $(selector).after(newElement);
+        $('.select2').select2();
+        return false;
+      }
+
+      $(document).on('click', '.add-form-row', function(e){
+        e.preventDefault();
+        cloneMore('.form-row-:last', 'seccionperiodo_set');
+        return false;
+      });
+    });
+  </script>
 {% endblock %}

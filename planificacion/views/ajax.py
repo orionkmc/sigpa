@@ -18,7 +18,6 @@ def trayecto(request):
     malla_id = request.GET.get('malla', None)
     malla = Malla.objects.get(pk=malla_id)
     ses = Subestructura.objects.filter(malla=malla)
-    print(ses)
     response = {
         "status": True,
         "results": [
@@ -64,7 +63,9 @@ def malla(request):
             {
                 "pk": muce.pk,
                 "unidad_credito": muce.unidad_credito.nombre,
-                "horas": (muce.horas_teoricas + muce.horas_practicas),
+                "horas_teoricas": muce.horas_teoricas,
+                "horas_practicas": muce.horas_practicas,
+                "horas_total": (muce.horas_teoricas + muce.horas_practicas),
             }
             for muce in malla_uce
         ],

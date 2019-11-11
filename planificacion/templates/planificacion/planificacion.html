@@ -9,43 +9,148 @@
 {% block content %}
   <div class="content-box mb-3">
     <br>
-    <div class="row">
+    <div class="row tables">
       <div class="col-12">
+      <style>
+        .border-top-2{
+          border-bottom: 2px solid;
+        }
+
+        table{
+          overflow: auto;
+          white-space: nowrap;
+          max-height: 100%;
+        }
+      </style>
+
+      <div class="col-12">
+        <h2>Personal Docente Ordinario</h2>
         <table width="100%" border="1">
           <thead>
             <tr>
-              <th>
+              <th class="border-top-2" rowspan="2">
                 DOCENTE/CEDULA <br>
                 TITULOS OBTENIDOS
               </th>
-              <th>DED.</th>
-              <th>CAT.</th>
-              <th>UNIDAD CURRICULAR (ES)</th>
-              <th>SECCIONES</th>
-              <th>HORAS</th>
-              <th>HORAS SEMANALES</th>
-              <th>
+              <th class="border-top-2" rowspan="2">DED.</th>
+              <th class="border-top-2" rowspan="2">CAT.</th>
+              <th class="border-top-2" rowspan="2">UNIDAD CURRICULAR (ES)</th>
+              <th class="border-top-2" rowspan="2">SECCIONES</th>
+              <th colspan="2">HORAS</th>
+              <th class="border-top-2" rowspan="2">HORAS SEMANALES</th>
+              <th class="border-top-2" rowspan="2">
                 TOTAL <br>
                 HOR. ACAD.
               </th>
-              <th>OBSERVACIONES</th>
+              <th class="border-top-2" rowspan="2">OBSERVACIONES</th>
+            </tr>
+            <tr>
+              <th class="border-top-2">T</th>
+              <th class="border-top-2">P</th>
             </tr>
           </thead>
-          {% for x in ds %}
+          <tbody>
+            {% for x in dso %}
+              {% docente_periodo_seccion x x.pk pk_periodo %}
+            {% empty %}
             <tr>
-              <td>
-                {{ x.nombre }} <br>
-                {{ x.cedula }}
-              </td>
-              <td>{{ x.dedicacion }}</td>
-              <td>{{ x.categoria }}</td>
-              {% docente_periodo_seccion x.pk pk_periodo %}
+              <th colspan="9" class="text-center">No hay docentes agregados</th>
             </tr>
-          {% empty %}
-          <tr>
-            <th colspan="9" class="text-center">No hay docentes agregados</th>
-          </tr>
-          {% endfor %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-12">
+        <h2>Personal Docente Contratado</h2>
+        <table width="100%" border="1">
+          <thead>
+            <tr>
+              <th class="border-top-2" rowspan="2">
+                DOCENTE/CEDULA <br>
+                TITULOS OBTENIDOS
+              </th>
+              <th class="border-top-2" rowspan="2">DED.</th>
+              <th class="border-top-2" rowspan="2">CAT.</th>
+              <th class="border-top-2" rowspan="2">UNIDAD CURRICULAR (ES)</th>
+              <th class="border-top-2" rowspan="2">SECCIONES</th>
+              <th colspan="2">HORAS</th>
+              <th class="border-top-2" rowspan="2">HORAS SEMANALES</th>
+              <th class="border-top-2" rowspan="2">
+                TOTAL <br>
+                HOR. ACAD.
+              </th>
+              <th class="border-top-2" rowspan="2">OBSERVACIONES</th>
+            </tr>
+            <tr>
+              <th class="border-top-2">T</th>
+              <th class="border-top-2">P</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for x in dsc %}
+              {% docente_periodo_seccion x x.pk pk_periodo %}
+            {% empty %}
+            <tr>
+              <th colspan="9" class="text-center">No hay docentes agregados</th>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+
+      <div class="col-12">
+        <h2>Otros</h2>
+        <table width="100%" border="1">
+          <thead>
+            <tr>
+              <th class="border-top-2" rowspan="2">
+                DOCENTE/CEDULA <br>
+                TITULOS OBTENIDOS
+              </th>
+              <th class="border-top-2" rowspan="2">DED.</th>
+              <th class="border-top-2" rowspan="2">CAT.</th>
+              <th class="border-top-2" rowspan="2">UNIDAD CURRICULAR (ES)</th>
+              <th class="border-top-2" rowspan="2">SECCIONES</th>
+              <th colspan="2">HORAS</th>
+              <th class="border-top-2" rowspan="2">HORAS SEMANALES</th>
+              <th class="border-top-2" rowspan="2">
+                TOTAL <br>
+                HOR. ACAD.
+              </th>
+              <th class="border-top-2" rowspan="2">OBSERVACIONES</th>
+            </tr>
+            <tr>
+              <th class="border-top-2">T</th>
+              <th class="border-top-2">P</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for x in sp_sp %}
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                  <a
+                    href="{% url 'seccion' x.seccion.periodo.periodo.pk x.seccion.pk %}"
+                    target="_blank">{{ x.unidad_curricular }}
+                  </a>
+                </td>
+                <td>{{ x.seccion.periodo.trimestre }} "{{ x.seccion.nombre }}"</td>
+                <td>{{ x.horas_teoricas|floatformat:1 }}</td>
+                <td>{{ x.horas_practicas|floatformat:1 }}</td>
+                <td>{{ x.horas_semanales|floatformat:1 }}</td>
+                <td>{{ x.horas_semanales|floatformat:1 }}</td>
+                <td></td>
+              </tr>
+            {% empty %}
+            <tr>
+              <th colspan="9" class="text-center">No hay docentes agregados</th>
+            </tr>
+            {% endfor %}
+          </tbody>
         </table>
       </div>
     </div>
@@ -53,4 +158,8 @@
 {% endblock %}
 
 {% block javascript %}
+<script>
+  // let windowHeight  = $(window).height();
+  // $('#wrapper').css('max-height', windowHeight - 50);
+</script>
 {% endblock %}

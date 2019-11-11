@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from carrera.models import Malla
+from carrera.models import Subestructura
 from planificacion.models import Periodo, Seccion, TURNO_CHOICES
 from django.forms import ModelForm
 from docentes.models import Docentes
@@ -63,19 +63,21 @@ class MallaForm(forms.Form):
     CHOICES_SUB_SUBESTRUCTURA = (
         ('', 'Selecciona un Trayecto'),
     )
-    malla = forms.ModelChoiceField(
-        queryset=Malla.objects.all(),
-        empty_label="Mallas Academicas",
-        required=False,
-        widget=forms.Select(
+    # malla = forms.ModelChoiceField(
+    #     queryset=Malla.objects.all(),
+    #     empty_label="Mallas Academicas",
+    #     required=False,
+    #     widget=forms.Select(
+    #         attrs={'class': 'form-control form-control-sm'},
+    #     )
+    # )
+    subestructura = forms.ModelChoiceField(
+        queryset=Subestructura.objects.all(), label="Trayectos",
+        empty_label="Selecciona un Trayecto",
+        required=False, widget=forms.Select(
             attrs={'class': 'form-control form-control-sm'},
-        )
-    )
-    subestructura = forms.CharField(
-        label="Trayectos", required=False, widget=forms.Select(
-            attrs={'class': 'form-control form-control-sm'},
-            choices=CHOICES_SUBESTRUCTURA
         ))
+
     sub_subestructura = forms.CharField(
         label="Trimestres", required=False, widget=forms.Select(
             attrs={'class': 'form-control form-control-sm'},
@@ -102,7 +104,17 @@ class SeccionPeriodoForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(SeccionPeriodoForm, self).__init__(*args, **kwargs)
         for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'form-control'
+            self.fields[field].widget.attrs['form'] = 'save_seccion_periodo'
+
+        self.fields['unidad_curricular'].\
+            widget.attrs['class'] = 'form-control select2'
+        self.fields['docentes'].\
+            widget.attrs['class'] = 'form-control select2'
+
+        self.fields['horas_teoricas'].\
+            widget.attrs['class'] = 'form-control form-control-sm'
+        self.fields['horas_practicas'].\
+            widget.attrs['class'] = 'form-control form-control-sm'
 
 
 SeccionPeriodoFormSet = inlineformset_factory(

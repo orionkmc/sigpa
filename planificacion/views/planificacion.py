@@ -57,6 +57,8 @@ class PlanificacionView(View):
         if periodo_form.is_valid():
             secciones = request.POST.getlist('secciones[]')
             tt = request.POST.getlist('tt[]')
+            type_seccion = request.POST.getlist('type_seccion[]')
+            print(type_seccion)
             p = periodo_form.save()
 
             for idx, seccion in enumerate(secciones):
@@ -65,10 +67,11 @@ class PlanificacionView(View):
                     trimestre=sse, periodo=p, secciones=seccion)
                 mucep.save()
                 for x in range(0, int(seccion)):
-                    codigo = "{}-{}-{}".format(
+                    codigo = "{}-{}-{}-{}".format(
                         request.POST.get('codigo'),
                         sse,
-                        SECCION_CHOICES[x]
+                        SECCION_CHOICES[x],
+                        type_seccion[idx]
                     )
                     s = Seccion(
                         codigo=codigo,
@@ -96,11 +99,27 @@ class PlanificacionPlanillasView(View):
 
         sp = SeccionPeriodo.objects.filter(seccion__periodo__periodo__pk=pk)
 
-        ds = Docentes.objects.annotate(
+        dsc = Docentes.objects.annotate(
             dcount=Count('pk')).filter(
-                seccion_periodo_docente__seccion__periodo__periodo__pk=pk)
+                seccion_periodo_docente__seccion__periodo__periodo__pk=pk,
+                status='Contratado',
+        )
+
+        dso = Docentes.objects.annotate(
+            dcount=Count('pk')).filter(
+                seccion_periodo_docente__seccion__periodo__periodo__pk=pk,
+                status='Ordinario',
+        )
+
+        sp_sp = SeccionPeriodo.objects.filter(
+            docentes__pk=None,
+            seccion__periodo__periodo__pk=pk
+        )
+
         return render(request, 'planificacion/planificacion.html', {
             'pk_periodo': pk,
             'sp': sp,
-            'ds': ds
+            'dsc': dsc,
+            'dso': dso,
+            'sp_sp': sp_sp,
         })

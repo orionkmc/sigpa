@@ -100,10 +100,11 @@ class PostgradosDocente(models.Model):
 
 
 class Docentes(models.Model):
-    cedula = models.PositiveIntegerField('cedula', unique=True)
+    cedula = models.PositiveIntegerField(
+        'cedula', unique=True, null=True, blank=True)
     nombre = models.CharField(u'Nombre', max_length=50)
     apellido = models.CharField(u'Apellido', max_length=50)
-    direccion = models.TextField(u'Dirección')
+    direccion = models.TextField(u'Dirección', null=True, blank=True)
     dedicacion = models.CharField(
         u'Dedicacion', max_length=5, choices=DEDICAION, default='TC')
     categoria = models.CharField(
@@ -114,6 +115,7 @@ class Docentes(models.Model):
     class Meta:
         verbose_name = 'Docente'
         verbose_name_plural = 'Docentes'
+        ordering = ('nombre', )
 
     def __str__(self):
-        return self.nombre
+        return self.nombre + ' ' + self.apellido

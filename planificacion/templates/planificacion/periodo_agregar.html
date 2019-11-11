@@ -7,12 +7,12 @@
 {% block content %}
   <!-- one box -->
   <div class="content-box mb-3">
-      <h1 class="page-header">Nuevo periodo</h1>
+      <h1 class="page-header">Nueva Planificación Academica</h1>
       <form id="periodo_form" action="" method="POST">
           {% csrf_token %}
           
           <div class="row">
-            <div class="col-md-6 form-group {% if periodo_form.codigo.errors %}parsley-error{% endif %}">
+            <div class="col-md-2 form-group {% if periodo_form.codigo.errors %}parsley-error{% endif %}">
               {{ periodo_form.codigo }}
               {% if periodo_form.codigo.help_text %}
                 <p class="help">{{ periodo_form.codigo.help_text|safe }}</p>
@@ -22,7 +22,7 @@
               {% endfor %}
             </div>
             
-            <div class="col-md-6 form-group {% if periodo_form.nombre.errors %}parsley-error{% endif %}">
+            <div class="col-md-10 form-group {% if periodo_form.nombre.errors %}parsley-error{% endif %}">
               {{ periodo_form.nombre }}
               {% if periodo_form.nombre.help_text %}
                 <p class="help">{{ periodo_form.nombre.help_text|safe }}</p>
@@ -54,6 +54,7 @@
           </div>
 
           <div class="row">
+            <!--
             <div class="col-md-3 form-group {% if malla_form.malla.errors %}parsley-error{% endif %}">
               {{ malla_form.malla }}
               {% if malla_form.malla.help_text %}
@@ -63,7 +64,8 @@
                 <p class="text-danger">{{ error }}</p>
               {% endfor %}
             </div>
-
+            -->
+            
             <div class="col-md-3 form-group {% if malla_form.subestructura.errors %}parsley-error{% endif %}">
               {{ malla_form.subestructura }}
               {% if malla_form.subestructura.help_text %}
@@ -82,6 +84,14 @@
               {% for error in malla_form.sub_subestructura.errors %}
                 <p class="text-danger">{{ error }}</p>
               {% endfor %}
+            </div>
+            
+            <div class="col-md-3 form-group">
+              <select name="" id="type-seccion" class="form-control form-control-sm">
+                <option value="seccion-recular">Sección Recular</option>
+                <option value="prosecusion">Prosecusión</option>
+                <option value="prosecusion-fin-de-semana">Prosecusión fin de semana</option>
+              </select>
             </div>
 
             <div class="col-md-3 form-group">
@@ -111,7 +121,9 @@
                     <thead>
                       <tr>
                         <th>Unidad Curricular</th>
-                        <th>Nº Hora</th>
+                        <th>Nº Hra. T.</th>
+                        <th>Nº Hra. P.</th>
+                        <th>Total Hra.</th>
                         <th>Nº Sección</th>
                       </tr>
                     </thead>
@@ -119,6 +131,8 @@
                       {% for a in mp.trimestre.parentId.malla_uce_ss_estruct.all %}
                         <tr>
                           <td>{{a.unidad_credito.nombre}}</td>
+                          <td>{{a.horas_teoricas}}</td>
+                          <td>{{a.horas_practicas}}</td>
                           <td>{{a.horas_total}}</td>
                           <td>{{mp.secciones}}</td>
                         </tr>
@@ -185,7 +199,8 @@
   $("#addPlanificacion").click(function () {
     let trimestre = $("#id_sub_subestructura").val();
     let secciones = $("#id_secciones").val();
-    sub_sub_estructura = $("#id_sub_subestructura").text();
+    let sub_sub_estructura = $("#id_sub_subestructura").text();
+    let type_seccion = $("#type-seccion option:selected").text();
 
     $.ajax({
       url: '/ajax/malla/',
@@ -200,28 +215,32 @@
             <div class="table-responsive">
             <div class="d-flex justify-content-between">
               <h3 class="page-header">
-                ${data.sub_sub_estructura}
+                ${data.sub_sub_estructura} (${type_seccion})
               </h3>
               <a href="javascript:void(0);" class="text-danger btn-delete"><i class="fas fa-trash-alt"></i></a>
             </div>
 
               <input type="hidden" name="secciones[]" value="${secciones}">
               <input type="hidden" name="tt[]" value="${trimestre}">
+              <input type="hidden" name="type_seccion[]" value="${type_seccion}">
 
               <table class="table table-hover table-sm">
                 <thead>
                   <tr>
                     <th scope="col">Unidad Curricular</th>
-                    <th scope="col">Nº Hra.</th>
-                    <th scope="col">Nº Secc.</th>
+                    <th scope="col">Nº Hra. T.</th>
+                    <th scope="col">Nº Hra. P.</th>
                     <th scope="col">Total Hra.</th>
+                    <th scope="col">Nº Secc.</th>
                   </tr>
                 </thead>
                 <tbody>`
                   for(i in data.results){
                     table_tt += `<tr>
                       <td>${data.results[i].unidad_credito}</td>
-                      <td>${data.results[i].horas}</td>
+                      <td>${data.results[i].horas_teoricas}</td>
+                      <td>${data.results[i].horas_practicas}</td>
+                      <td>${data.results[i].horas_total}</td>
                       <td>${secciones}</td>
                       <td></td>
                     </tr>`

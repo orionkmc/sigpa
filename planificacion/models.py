@@ -61,6 +61,14 @@ class SeccionPeriodo(models.Model):
         related_name='seccion_periodo_docente')
     unidad_curricular = models.ForeignKey(
         UnidadCurricular, on_delete=models.SET_NULL, null=True)
+    horas_teoricas = models.FloatField(
+        "Horas Teoricas", default=0, null=True, blank=True)
+    horas_practicas = models.FloatField(
+        "Horas Practicas", default=0, null=True, blank=True)
 
     def __str__(self):
         return self.seccion.codigo
+
+    @property
+    def horas_semanales(self):
+        return self.horas_teoricas + self.horas_practicas

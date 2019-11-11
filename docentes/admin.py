@@ -28,6 +28,7 @@ class DocentesInline(admin.ModelAdmin):
     inlines = [
         TelefonoInline, EmailInline, PregradosDocenteInline,
         PostgradosDocenteInline]
+    search_fields = ('cedula', )
 
 
 admin.site.register(Docentes, DocentesInline)
