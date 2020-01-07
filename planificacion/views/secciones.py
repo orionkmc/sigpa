@@ -32,6 +32,13 @@ class AddSeccionView(View):
             s_form.periodo = mp
             s_form.save()
 
+            malla_uce = mp.trimestre.malla_uce_ss_estruct.all()
+            for x in malla_uce:
+                SeccionPeriodo(
+                    seccion=s_form,
+                    unidad_curricular=x.unidad_credito,
+                ).save()
+
             return redirect('secciones', periodo.pk)
         context = {
             'periodo': periodo,
@@ -97,6 +104,7 @@ class SeccionView(View):
             seccion_periodo_form = SeccionPeriodoFormSet(
                 request.POST, instance=seccion
             )
+
             if seccion_periodo_form.is_valid():
                 for form in seccion_periodo_form:
                     form.save()
@@ -116,6 +124,7 @@ class SeccionVerView(View):
         sps = SeccionPeriodo.objects.filter(seccion=s)
 
         context = {
+            'periodo_pk': periodo,
             'seccion': s,
             'sps': sps,
         }

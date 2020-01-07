@@ -21,7 +21,7 @@
             {% for sp in sps %}
               <tr>
                 <td>{{sp.unidad_curricular}}</td>
-                <td>{{sp.docentes}}</td>
+                <td>{{sp.docentes|default:"-"}}</td>
               </tr>
             {% endfor %}
           </tbody>
@@ -29,6 +29,7 @@
       </div>
     </div>
   </div>
+  <a href="{% url 'secciones' periodo_pk %}" class="btn btn-primary btn-block">Volver</a>
 {% endblock %}
 
 {% block javascript %}

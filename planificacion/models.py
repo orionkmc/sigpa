@@ -53,12 +53,18 @@ class Seccion(models.Model):
     def __str__(self):
         return self.codigo
 
+    class Meta:
+        ordering = ('codigo', )
+
 
 class SeccionPeriodo(models.Model):
     seccion = models.ForeignKey(Seccion, on_delete=models.CASCADE)
     docentes = models.ForeignKey(
         Docentes, on_delete=models.SET_NULL, null=True, blank=True,
         related_name='seccion_periodo_docente')
+    suplente = models.ForeignKey(
+        Docentes, on_delete=models.SET_NULL, null=True, blank=True,
+        related_name='seccion_periodo_docente_suplente')
     unidad_curricular = models.ForeignKey(
         UnidadCurricular, on_delete=models.SET_NULL, null=True)
     horas_teoricas = models.FloatField(

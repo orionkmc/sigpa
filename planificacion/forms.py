@@ -103,12 +103,13 @@ class SeccionPeriodoForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(SeccionPeriodoForm, self).__init__(*args, **kwargs)
+        self.fields['unidad_curricular'].widget = forms.HiddenInput()
+
         for field in self.fields:
             self.fields[field].widget.attrs['form'] = 'save_seccion_periodo'
-
-        self.fields['unidad_curricular'].\
-            widget.attrs['class'] = 'form-control select2'
         self.fields['docentes'].\
+            widget.attrs['class'] = 'form-control select2'
+        self.fields['suplente'].\
             widget.attrs['class'] = 'form-control select2'
 
         self.fields['horas_teoricas'].\

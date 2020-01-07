@@ -89,4 +89,15 @@
 {% endblock %}
 
 {% block javascript %}
+<script>
+  $(function () {
+    $(".btn-delete").click(function (e) {
+      e.preventDefault();
+      a = confirm('¿Estas seguro que deseas eliminar esta seccion?')
+      if (a) {
+        $(this).parent('form').submit();  
+      }
+    });
+  });
+</script>
 {% endblock %}

@@ -14,7 +14,8 @@ from planificacion import views as views_planificacion
 urlpatterns = [
     path(
         '',
-        login_required(TemplateView.as_view(template_name="dashboard.html"))),
+        login_required(TemplateView.as_view(template_name="dashboard.html")),
+        name="home"),
 
     path('admin/', admin.site.urls),
 

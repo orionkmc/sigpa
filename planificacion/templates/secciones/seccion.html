@@ -1,5 +1,6 @@
 {% extends 'layouts.html' %}
 {% load static %}
+{% load filter_tag %}
 
 {% block planificacion_display %}display: block;{% endblock %}
 {% block periodos_active %}link-current{% endblock %}
@@ -11,66 +12,96 @@
 {% block content %}
   <div class="content-box mb-3">
     <h1>Periodo Academico {{seccion.periodo.periodo}}, Sección "{{seccion}}", {{seccion.periodo}}</h1>
-
     <br>
     <div class="row">
       <div class="col-12">
-        <table class="table table-hover table-sm">
-          <thead>
-            <tr>
-              <th>Unidad Curricular</th>
-              <th>Docente</th>
-              <th>Horas Teoricas</th>
-              <th>Horas Practicas</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tfoot>
-            <tr>
-              <td colspan="5" class="text-center">
-                <a
-                  href="#"
-                  class="btn btn-outline-light btn-block btn-sm text-danger add-form-row"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title="Agregar Unidad Curricular">
-                  <span class="list-icon">
-                    <i class="fas fa-plus"></i>
-                  </span>
-                </a>
-              </td>
-            </tr>
-          </tfoot>
-          <tbody>
-            {% for m in seccion_periodo_form %}
-              <tr class="form-row-">
-                <td>{{ m.unidad_curricular }}</td>
-                <td>{{ m.docentes }}</td>
-                <td>{{ m.horas_teoricas }}</td>
-                <td>{{ m.horas_practicas }}</td>
-                <td>
-                  <form action="" method="POST" class="d-inline eliminar_uc">
-                    {% csrf_token %}
-                    <input type="hidden" name="seccion_periodo" value="{{ m.id.value }}">
-                    <button
-                      class="btn-delete btn btn-outline-danger btn-sm"
-                      data-toggle="tooltip"
-                      data-placement="top"
-                      title="Eliminar Unidad Curricular">
-                      <span class="list-icon">
-                        <i class="fas fa-trash"></i>
-                      </span>
-                    </button>
-                  </form>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+
+        {# ---------------------------------------------------------------------------- #}
+        <div id="collapse" class="collapse show" aria-labelledby="UC-{{ m.unidad_curricular.value }}" style="">
+          <div class="card-body p-0">
+            
+            <div class="accordion" id="accordionTT">
+              {% for m in seccion_periodo_form %}
+                <div class="card"> <!-- inicio -->
+                  <div class="card-header p-1" id="UC-{{ m.unidad_curricular.value }}">
+                    <h2 class="mb-0">
+                      <button
+                        class="btn btn-link text-dark"
+                        type="button"
+                        data-toggle="collapse"
+                        data-target="#collapse{{ m.unidad_curricular.value }}"
+                        aria-expanded="true"
+                        aria-controls="collapse{{ m.unidad_curricular.value }}"
+                        style="font-size: 14px;"
+                      >
+                      {% unidades_curricular m.unidad_curricular.value %}
+                      </button>
+
+                      <form action="" method="POST" class="d-inline eliminar_uc">
+                        {% csrf_token %}
+                        {{ m.unidad_curricular }}
+                        <input type="hidden" name="seccion_periodo" value="{{ m.id.value }}">
+                        <button
+                          class="
+                            btn
+                            btn-sm
+                            btn-link
+                            text-danger
+                            float-right
+                            btn-delete"
+                          data-toggle="tooltip"
+                          data-placement="top"
+                          title="Eliminar Unidad Curricular">
+                          <span class="list-icon">
+                            <i class="fas fa-trash"></i>
+                          </span>
+                        </button>
+                      </form>
+                    </h2>
+                  </div>
+                  <div
+                    id="collapse{{ m.unidad_curricular.value }}"
+                    class="collapse show"
+                    aria-labelledby="UC-{{ m.unidad_curricular.value }}"
+                  >
+                    <div class="card-body px-1 py-0">
+                      <div class="border-bottom p-3">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div>{{ m.docentes.label }}</div>
+                            <div>{{ m.docentes }}</div>                            
+                          </div>
+                          <div class="col-md-6">
+                            <div>{{ m.suplente.label }}</div>
+                            <div>{{ m.suplente }}</div>
+                          </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div>{{ m.horas_teoricas.label }}</div>
+                            <div>{{ m.horas_teoricas }}</div>
+                          </div>
+                          <div class="col-md-6">
+                            <div>{{ m.horas_practicas.label }}</div>
+                            <div>{{ m.horas_practicas }}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div> <!-- fin -->
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <br>
+
         <form id="save_seccion_periodo" action="" method="POST">
           {% csrf_token %}
           {{ seccion_periodo_form.management_form }}
           {% for m in seccion_periodo_form %}
+            {{ m.unidad_curricular }}
             {{ m.seccion }}
             {{ m.id }}
           {% endfor %}
@@ -80,25 +111,13 @@
       </div>
     </div>
   </div>
-  <div id="docentes_option" class="d-none">
-    <option value="">---------</option>
-    {% for docente in docentes %}
-      <option value="{{ docente.pk }}">{{ docente.nombre }} {{ docente.apellido }}</option>
-    {% endfor %}
-  </div>
-  <div id="unidadesc_option" class="d-none">
-    <option value="">---------</option>
-    {% for unidadC in unidadesC %}
-      <option value="{{ unidadC.pk }}">{{ unidadC.nombre }}</option>
-    {% endfor %}
-  </div>
 {% endblock %}
 
 {% block javascript %}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
   <script>
     $(document).ready(function () {
-      $('.select2').select2();
+      $('.select2').select2({ width: '100%' });
       $(".btn-delete").click(function (e) {
         e.preventDefault();
         a = confirm('¿Estas seguro que deseas eliminar esta unidad curricular?')
@@ -110,7 +129,8 @@
       $(document).on('click', '.btn-delete-2', function (e) {
         $(this).parents('tr').remove()
       });
-      function cloneMore(selector, prefix) {
+
+/*      function cloneMore(selector, prefix) {
         var total = $('#id_' + prefix + '-TOTAL_FORMS').val();
         var newElement = `
           <tr class="form-row-">
@@ -174,7 +194,7 @@
         e.preventDefault();
         cloneMore('.form-row-:last', 'seccionperiodo_set');
         return false;
-      });
+      });*/
     });
   </script>
 {% endblock %}

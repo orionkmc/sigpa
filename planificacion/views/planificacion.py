@@ -95,22 +95,25 @@ class PlanificacionView(View):
 
 class PlanificacionPlanillasView(View):
     def get(self, request, pk):
-        from django.db.models import Count
+        from django.db.models import Count, Q
 
         sp = SeccionPeriodo.objects.filter(seccion__periodo__periodo__pk=pk)
 
-        dsc = Docentes.objects.annotate(
-            dcount=Count('pk')).filter(
-                seccion_periodo_docente__seccion__periodo__periodo__pk=pk,
-                status='Contratado',
+        # Personal Docente Contratado
+        dsc = Docentes.objects.annotate(dcount=Count('pk')).filter(
+            Q(seccion_periodo_docente__seccion__periodo__periodo__pk=pk) |
+            Q(seccion_periodo_docente_suplente__seccion__periodo__periodo__pk=pk),
+            status='Contratado',
         )
 
-        dso = Docentes.objects.annotate(
-            dcount=Count('pk')).filter(
-                seccion_periodo_docente__seccion__periodo__periodo__pk=pk,
-                status='Ordinario',
+        # Personal Docente Ordinario
+        dso = Docentes.objects.annotate(dcount=Count('pk')).filter(
+            Q(seccion_periodo_docente__seccion__periodo__periodo__pk=pk) |
+            Q(seccion_periodo_docente_suplente__seccion__periodo__periodo__pk=pk),
+            status='Ordinario',
         )
 
+        # Otros
         sp_sp = SeccionPeriodo.objects.filter(
             docentes__pk=None,
             seccion__periodo__periodo__pk=pk
