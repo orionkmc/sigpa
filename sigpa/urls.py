@@ -48,6 +48,12 @@ urlpatterns = [
         'periodo/<int:periodo>/seccion/<int:seccion>/ver',
         login_required(views_planificacion.SeccionVerView.as_view()),
         name='seccion_ver'),
+    # Horario
+
+    path(
+        'seccion/<int:seccion>/horario',
+        login_required(views_planificacion.HorarioView.as_view()),
+        name='horario'),
 
     # reportes
     path(

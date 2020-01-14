@@ -41,6 +41,16 @@
                   <td>{{sec.turno}}</td>
                   <td class="text-right pr-5">
                     <a
+                      href="{% url 'horario' sec.pk %}"
+                      class="btn btn-outline-danger btn-sm"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="Horario">
+                      <span class="list-icon">
+                        <i class="fas fa-calendar"></i>
+                      </span>
+                    </a>
+                    <a
                       href="{% url 'seccion_ver' mp.periodo.pk sec.pk %}"
                       class="btn btn-outline-danger btn-sm"
                       data-toggle="tooltip"

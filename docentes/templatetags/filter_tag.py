@@ -2,6 +2,7 @@ from django import template
 from django.db.models import Q
 from planificacion.models import SeccionPeriodo
 from carrera.models import UnidadCurricular
+from planificacion.models import Horarios, DIA_CHOICES, HORA_CHOICES
 register = template.Library()
 
 

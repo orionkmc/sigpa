@@ -80,7 +80,14 @@ class SeccionView(View):
         seccion = Seccion.objects.get(pk=seccion)
         muce = MallaUCE.objects.filter(
             sub_sub_estructura=seccion.periodo.trimestre)
-        seccion_periodo_form = SeccionPeriodoFormSet(instance=seccion)
+        seccion_periodo_form = SeccionPeriodoFormSet(
+            instance=[
+                seccion,
+                {
+                    'title': 'Django is now open source',
+                }
+            ],
+        )
         context = {
             'seccion': seccion,
             'muce': muce,
@@ -94,7 +101,7 @@ class SeccionView(View):
         seccion = Seccion.objects.get(pk=seccion)
         muce = MallaUCE.objects.filter(
             sub_sub_estructura=seccion.periodo.trimestre)
-
+        SeccionPeriodo
         if request.POST.get('seccion_periodo'):
             d = SeccionPeriodo.objects.get(
                 pk=request.POST.get('seccion_periodo'))

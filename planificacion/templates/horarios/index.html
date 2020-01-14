@@ -1,0 +1,112 @@
+{% extends 'layouts.html' %}
+{% load static %}
+{% block planificacion_display %}display: block;{% endblock %}
+{% block periodos_active %}link-current{% endblock %}
+
+{% block content %}
+  <div class="content-box mb-3">
+    <br>
+    <div class="row">
+      <div class="col-12">
+        <div class="table-responsive">
+          <table border="1" width="100%" class="table">
+            <thead>
+              <tr>
+                <th>Hora</th>
+                {% for dia in dias %}
+                  <th>{{ dia.0 }}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for hora in horas %}
+                <tr>
+                  <td>{{ hora.1 }}</td>
+                  {% for dia in dias %}
+                    <td id="{{dia.0}}-{{hora.0}}"></td>
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a href="{% url 'secciones' periodo %}" class="btn btn-primary btn-block">Volver</a>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    m = JSON.parse('{{ materias|safe }}');
+    m.map((m)=>{
+      a = `${m.first_dia}-${m.first_hora}`
+      $('#' + a).attr('rowspan', m.cant);
+      for (var i = 1; i < m.cant; i++) {
+        id_delete = `${m.first_dia}-${parseInt(m.first_hora) + i}`
+        $('#' + id_delete).remove();
+      }
+      data = `<div>
+        <span style="font-size: 10px;">${m.unidad_curricular}</span><br>
+        <span style="font-size: 10px;">${m.docente.apellido} ${m.docente.nombre}</span><br>
+        <span style="font-size: 10px;">${m.first_dia}</span>
+        <span style="font-size: 10px;">${m.first_hora}</span><br>
+        <span style="font-size: 10px;">${m.seccion}: ${m.salon}</span>
+      </div>`
+      $('#' + a).html(data);
+    });
+
+</script>
+{% endblock %}
+
+<!--<style>
+  .table {
+    display: table;
+    height:auto;
+    border: 2px solid black; 
+  }
+
+  .cell {
+    display:table-cell;
+    vertical-align:top;
+  }
+
+  .cell p{
+    border-bottom: 2px solid black;
+    border-right: 2px solid black;
+    margin: 0;
+  }
+  .cell p:last-child{
+    border-bottom: 0px solid black;
+  }
+
+  .container {
+    height: 100%;
+    overflow:auto;
+    border: 2px solid green;
+    -moz-box-sizing: border-box;
+  }
+</style>
+<div class="table">
+  <div class="cell">
+    <p>Hora</p>
+    {% for hora in horas %}
+      <p>{{ hora.1 }}</p>
+    {% endfor %}
+  </div>
+  <div class="cell">
+    <p>Lunes</p>
+  </div>
+  <div class="cell">
+    <p>Martes</p>
+  </div>
+  <div class="cell">
+    <p>Miercoles</p>
+  </div>
+  <div class="cell">
+    <p>Jueves</p>
+  </div>
+  <div class="cell">
+    <p>Viernes</p>
+  </div>
+</div> -->

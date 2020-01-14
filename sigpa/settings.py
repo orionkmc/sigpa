@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'planificacion',
     'carrera',
     'audit',
+    'plantaFisica',
 ]
 
 MIDDLEWARE = [
@@ -52,8 +53,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'audit.middleware.RequestMiddleware'
+    'audit.middleware.RequestMiddleware',
 ]
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 120 * 60
 
 ROOT_URLCONF = 'sigpa.urls'
 

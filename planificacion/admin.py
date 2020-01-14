@@ -1,6 +1,6 @@
 from django.contrib import admin
 from planificacion.models import Periodo, Seccion, MallaUCEPeriodo,\
-    SeccionPeriodo
+    SeccionPeriodo, Horarios
 
 
 class MallaUCEPeriodoInline(admin.StackedInline):
@@ -59,6 +59,10 @@ class SeccionPeriodoAdmin(admin.ModelAdmin):
     list_display = ('seccion', 'docentes', 'unidad_curricular')
 
 
+class HorariosAdmin(admin.ModelAdmin):
+    list_display = ('seccion_periodo', 'salon', 'dia', 'hora')
+    raw_id_fields = ('seccion_periodo', 'salon')
+
 # admin.site.register(Estructura, EstructuraAdmin)
 # admin.site.register(Subestructura, SubestructuraAdmin)
 # admin.site.register(SubSubEstructura)
@@ -70,3 +74,4 @@ admin.site.register(SeccionPeriodo, SeccionPeriodoAdmin)
 admin.site.register(Periodo, PeriodoAdmin)
 admin.site.register(Seccion, SeccionesAdmin)
 admin.site.register(MallaUCEPeriodo, MallaUCEPeriodoAdmin)
+admin.site.register(Horarios, HorariosAdmin)

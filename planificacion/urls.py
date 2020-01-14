@@ -21,4 +21,9 @@ urlpatterns = [
         'planificacion/',
         login_required(views.PlanificacionView.as_view()),
         name='periodo'),
+
+    path(
+        'planificacion/',
+        login_required(views.PlanificacionView.as_view()),
+        name='periodo'),
 ]

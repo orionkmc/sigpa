@@ -2,10 +2,11 @@
 from django import forms
 from carrera.models import Subestructura
 from planificacion.models import Periodo, Seccion, TURNO_CHOICES
-from django.forms import ModelForm
+from django.forms import ModelForm, ModelChoiceField
 from docentes.models import Docentes
 from planificacion.models import SeccionPeriodo
 from django.forms.models import inlineformset_factory
+from plantaFisica.models import Salon
 
 
 class SeccionForm(ModelForm):
@@ -96,13 +97,76 @@ class DocenteForm(forms.Form):
     )
 
 
+DIA_CHOICES = (
+    ('', '------'),
+    ('Lunes', 'Lunes'),
+    ('Martes', 'Martes'),
+    ('Miercoles', 'Miercoles'),
+    ('Jueves', 'Jueves'),
+    ('Viernes', 'Viernes'),
+    ('Sabado', 'Sabado'),
+    ('Domingo', 'Domingo'),
+)
+
+HORA_CHOICES = (
+    ('', '------'),
+    ('1', '07:00 a 07:45'),
+    ('2', '07:45 a 08:30'),
+    ('3', '08:40 a 09:25'),
+    ('4', '09:25 a 10:10'),
+    ('5', '10:20 a 11:05'),
+    ('6', '11:05 a 11:50'),
+    ('7', '11:50 a 12:45'),
+    ('8', '12:45 a 01:30'),
+    ('9', '01:30 a 02:25'),
+    ('10', '02:25 a 03:10'),
+    ('11', '03:10 a 03:55'),
+    ('12', '04:05 a 04:50'),
+    ('13', '04:50 a 05:35'),
+    ('14', '05:45 a 06:30'),
+)
+
+
+class MyModelChoiceField(ModelChoiceField):
+    def label_from_instance(self, obj):
+        return '{}{}'.format(obj.piso.edificio.codigo, obj.codigo)
+
+
 class SeccionPeriodoForm(ModelForm):
+    SALON_CHOICES = Salon.objects.all()
+
+    dia = forms.CharField(
+        label="Dia", required=True, widget=forms.Select(
+            attrs={'class': 'form-control form-control-sm'},
+            choices=DIA_CHOICES
+        ))
+    hora_desde = forms.CharField(
+        label="Hora Desde", required=True, widget=forms.Select(
+            attrs={'class': 'form-control form-control-sm'},
+            choices=HORA_CHOICES,
+        ))
+
+    hora_hasta = forms.CharField(
+        label="Hora Hasta", required=True, widget=forms.Select(
+            attrs={'class': 'form-control form-control-sm'},
+            choices=HORA_CHOICES,
+        ))
+    salon = MyModelChoiceField(
+        queryset=SALON_CHOICES,
+        empty_label="Selecciona un Salon",
+        widget=forms.Select(
+            attrs={'class': 'form-control form-control-sm select2'},
+        ),
+        required=True
+    )
+
     class Meta:
         model = SeccionPeriodo
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         super(SeccionPeriodoForm, self).__init__(*args, **kwargs)
+
         self.fields['unidad_curricular'].widget = forms.HiddenInput()
 
         for field in self.fields:

@@ -1,10 +1,38 @@
 from django.db import models
 from carrera.models import SubSubEstructura, UnidadCurricular
 from docentes.models import Docentes
+from plantaFisica.models import Salon
 
 TURNO_CHOICES = (
     ('diurno', 'Diurno'),
     ('nocturno', 'Nocturno'),
+)
+
+DIA_CHOICES = (
+    ('Lunes', 'Lunes'),
+    ('Martes', 'Martes'),
+    ('Miercoles', 'Miercoles'),
+    ('Jueves', 'Jueves'),
+    ('Viernes', 'Viernes'),
+    ('Sabado', 'Sabado'),
+    ('Domingo', 'Domingo'),
+)
+
+HORA_CHOICES = (
+    ('1', '07:00 a 07:45'),
+    ('2', '07:45 a 08:30'),
+    ('3', '08:40 a 09:25'),
+    ('4', '09:25 a 10:10'),
+    ('5', '10:20 a 11:05'),
+    ('6', '11:05 a 11:50'),
+    ('7', '11:50 a 12:45'),
+    ('8', '12:45 a 01:30'),
+    ('9', '01:30 a 02:25'),
+    ('10', '02:25 a 03:10'),
+    ('11', '03:10 a 03:55'),
+    ('12', '04:05 a 04:50'),
+    ('13', '04:50 a 05:35'),
+    ('14', '05:45 a 06:30'),
 )
 
 
@@ -78,3 +106,18 @@ class SeccionPeriodo(models.Model):
     @property
     def horas_semanales(self):
         return self.horas_teoricas + self.horas_practicas
+
+
+class Horarios(models.Model):
+    seccion_periodo = models.ForeignKey(
+        SeccionPeriodo, on_delete=models.CASCADE, related_name='horarios_seccion_periodo')
+    salon = models.ForeignKey(Salon, on_delete=models.CASCADE)
+    dia = models.CharField(
+        u'Dia', max_length=20, choices=DIA_CHOICES)
+    hora = models.CharField(
+        u'Hora', max_length=20, choices=HORA_CHOICES)
+
+    class Meta:
+        ordering = ('-pk', )
+        verbose_name = 'Horario'
+        verbose_name_plural = 'Horarios'
