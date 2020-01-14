@@ -13,6 +13,7 @@ class HorarioView(View):
         for sp in sps:
             if sp.horarios_seccion_periodo.all():
                 first = sp.horarios_seccion_periodo.all().first()
+
                 # last = sp.horarios_seccion_periodo.all().last()
                 cant = sp.horarios_seccion_periodo.all().count()
                 salon = '{} {}'.format(
@@ -31,7 +32,6 @@ class HorarioView(View):
                     'first_hora': first.hora,
                     'cant': cant,
                 })
-
         return render(request, 'horarios/index.html', {
             'seccion': seccion,
             'dias': DIA_CHOICES,

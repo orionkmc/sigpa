@@ -167,8 +167,32 @@ class SeccionPeriodoForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(SeccionPeriodoForm, self).__init__(*args, **kwargs)
 
-        self.fields['unidad_curricular'].widget = forms.HiddenInput()
+        instance = kwargs.get('instance', None)
+        dia = instance.horarios_seccion_periodo.all().first().dia
+        hora_desde = instance.horarios_seccion_periodo.all().first().hora
+        hora_hasta = instance.horarios_seccion_periodo.all().last().hora
+        salon = instance.horarios_seccion_periodo.all().last().salon
 
+        # {
+        #     'seccion': <Seccion: B-2018-T0T1-D-Sección Recular>,
+        #     'docentes': <Docentes: Dorys V Valero C>,
+        #     'suplente': None,
+        #     'unidad_curricular': <UnidadCurricular: Introducción a los Proyectos y al Programa>,
+        #     'horas_teoricas': 0.0,
+        #     'horas_practicas': 0.0,
+        #     'dia': 'Lunes',
+        #     'hora_desde': '1',
+        #     'hora_hasta': '3',
+        #     'salon': <Salon: 1>,
+        #     'id': <SeccionPeriodo: B-2018-T0T1-D-Sección Recular>
+        # }
+
+        self.fields['dia'].initial = dia
+        self.fields['hora_desde'].initial = hora_desde
+        self.fields['hora_hasta'].initial = hora_hasta
+        self.fields['salon'].initial = salon
+
+        self.fields['unidad_curricular'].widget = forms.HiddenInput()
         for field in self.fields:
             self.fields[field].widget.attrs['form'] = 'save_seccion_periodo'
         self.fields['docentes'].\

@@ -110,14 +110,16 @@ class SeccionPeriodo(models.Model):
 
 class Horarios(models.Model):
     seccion_periodo = models.ForeignKey(
-        SeccionPeriodo, on_delete=models.CASCADE, related_name='horarios_seccion_periodo')
-    salon = models.ForeignKey(Salon, on_delete=models.CASCADE)
+        SeccionPeriodo, on_delete=models.CASCADE,
+        related_name='horarios_seccion_periodo')
+    salon = models.ForeignKey(
+        Salon, on_delete=models.CASCADE, null=True, blank=True)
     dia = models.CharField(
-        u'Dia', max_length=20, choices=DIA_CHOICES)
+        u'Dia', max_length=20, choices=DIA_CHOICES, null=True, blank=True)
     hora = models.CharField(
-        u'Hora', max_length=20, choices=HORA_CHOICES)
+        u'Hora', max_length=20, choices=HORA_CHOICES, null=True, blank=True)
 
     class Meta:
-        ordering = ('-pk', )
+        ordering = ('hora', )
         verbose_name = 'Horario'
         verbose_name_plural = 'Horarios'

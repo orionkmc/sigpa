@@ -3,7 +3,7 @@ from django.views.generic import View
 from planificacion.forms import SeccionForm, SeccionPeriodoFormSet
 from carrera.models import MallaUCE, UnidadCurricular
 from planificacion.models import MallaUCEPeriodo, Periodo, Seccion,\
-    SeccionPeriodo
+    SeccionPeriodo, Horarios, HORA_CHOICES
 from docentes.models import Docentes
 # # # # # # # # # # # # # # # # # # # # # # # #
 #                 SECCIONES                   #
@@ -34,10 +34,12 @@ class AddSeccionView(View):
 
             malla_uce = mp.trimestre.malla_uce_ss_estruct.all()
             for x in malla_uce:
-                SeccionPeriodo(
+                sp = SeccionPeriodo(
                     seccion=s_form,
                     unidad_curricular=x.unidad_credito,
-                ).save()
+                )
+                sp.save()
+                Horarios(seccion_periodo=sp).save()
 
             return redirect('secciones', periodo.pk)
         context = {
@@ -81,12 +83,10 @@ class SeccionView(View):
         muce = MallaUCE.objects.filter(
             sub_sub_estructura=seccion.periodo.trimestre)
         seccion_periodo_form = SeccionPeriodoFormSet(
-            instance=[
-                seccion,
-                {
-                    'title': 'Django is now open source',
-                }
-            ],
+            instance=seccion,
+            initial={
+                'a': 'a'
+            }
         )
         context = {
             'seccion': seccion,
@@ -115,6 +115,19 @@ class SeccionView(View):
             if seccion_periodo_form.is_valid():
                 for form in seccion_periodo_form:
                     form.save()
+                    hora_desde = form.cleaned_data['hora_desde']
+                    hora_hasta = form.cleaned_data['hora_hasta']
+
+                    form.cleaned_data['id'].horarios_seccion_periodo.all().\
+                        delete()
+
+                    for x in range(int(hora_desde), int(hora_hasta)):
+                        Horarios(
+                            seccion_periodo=form.cleaned_data['id'],
+                            dia=form.cleaned_data['dia'],
+                            hora=HORA_CHOICES[x - 1][0],
+                            salon=form.cleaned_data['salon'],
+                        ).save()
         context = {
             'seccion': seccion,
             'muce': muce,

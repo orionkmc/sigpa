@@ -6,7 +6,7 @@ from django.views.generic.detail import DetailView
 from planificacion.forms import PeriodoForm, MallaForm
 from carrera.models import SubSubEstructura
 from planificacion.models import MallaUCEPeriodo, Periodo, Seccion,\
-    SeccionPeriodo
+    SeccionPeriodo, Horarios
 # from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from docentes.models import Docentes
 
@@ -80,10 +80,13 @@ class PlanificacionView(View):
                     s.save()
                     malla_uce = mucep.trimestre.malla_uce_ss_estruct.all()
                     for x in malla_uce:
-                        SeccionPeriodo(
+                        sp = SeccionPeriodo(
                             seccion=s,
                             unidad_curricular=x.unidad_credito,
-                        ).save()
+                        )
+                        sp.save()
+                        Horarios(seccion_periodo=sp).save()
+
             periodo_form = PeriodoForm()
         context = {
             'periodo_form': periodo_form,

@@ -88,20 +88,38 @@
                           <div class="col-md-3">
                             <div>{{ m.dia.label }}</div>
                             <div>{{ m.dia }}</div>
+                            {% if m.dia.errors %}
+                              {% for error in m.dia.errors %}
+                                <small class="form-text text-danger">{{ error }}</small>
+                              {% endfor %}
+                            {% endif %}
                           </div>
                           <div class="col-md-3">
                             <div>{{ m.hora_desde.label }}</div>
                             <div>{{ m.hora_desde }}</div>
+                            {% if m.hora_desde.errors %}
+                              {% for error in m.hora_desde.errors %}
+                                <small class="form-text text-danger">{{ error }}</small>
+                              {% endfor %}
+                            {% endif %}
                           </div>
                           <div class="col-md-3">
                             <div>{{ m.hora_hasta.label }}</div>
                             <div>{{ m.hora_hasta }}</div>
+                            {% if m.hora_hasta.errors %}
+                              {% for error in m.hora_hasta.errors %}
+                                <small class="form-text text-danger">{{ error }}</small>
+                              {% endfor %}
+                            {% endif %}
                           </div>
                           <div class="col-md-3">
                             <div>{{ m.salon.label }}</div>
                             <div>{{ m.salon }}</div>
-                          </div>
-                          <div class="col-md-3">
+                            {% if m.salon.errors %}
+                              {% for error in m.salon.errors %}
+                                <small class="form-text text-danger">{{ error }}</small>
+                              {% endfor %}
+                            {% endif %}
                           </div>
                         </div>
                       </div>
