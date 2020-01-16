@@ -70,6 +70,11 @@
                           <div class="col-md-3">
                             <div>{{ m.docentes.label }}</div>
                             <div>{{ m.docentes }}</div>
+                            {% if m.docentes.errors %}
+                              {% for error in m.docentes.errors %}
+                                <small class="form-text text-danger">{{ error }}</small>
+                              {% endfor %}
+                            {% endif %}
                           </div>
                           <div class="col-md-3">
                             <div>{{ m.suplente.label }}</div>

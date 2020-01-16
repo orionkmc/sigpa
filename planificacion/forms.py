@@ -177,7 +177,8 @@ class SeccionPeriodoForm(ModelForm):
         #     'seccion': <Seccion: B-2018-T0T1-D-Sección Recular>,
         #     'docentes': <Docentes: Dorys V Valero C>,
         #     'suplente': None,
-        #     'unidad_curricular': <UnidadCurricular: Introducción a los Proyectos y al Programa>,
+        #     'unidad_curricular'
+        #     <UnidadCurricular: Introducción a los Proyectos y al Programa>,
         #     'horas_teoricas': 0.0,
         #     'horas_practicas': 0.0,
         #     'dia': 'Lunes',
@@ -197,6 +198,7 @@ class SeccionPeriodoForm(ModelForm):
             self.fields[field].widget.attrs['form'] = 'save_seccion_periodo'
         self.fields['docentes'].\
             widget.attrs['class'] = 'form-control select2'
+        self.fields['docentes'].required = True
         self.fields['suplente'].\
             widget.attrs['class'] = 'form-control select2'
 

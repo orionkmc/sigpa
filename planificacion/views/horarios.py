@@ -23,12 +23,19 @@ class HorarioView(View):
                         sp.horarios_seccion_periodo.all()[0]
                             .salon.codigo
                     )
-                    materias.append({
-                        'unidad_curricular': sp.unidad_curricular.nombre,
-                        'docente': {
+                    try:
+                        docente = {
                             'nombre': sp.docentes.nombre,
                             'apellido': sp.docentes.apellido
-                        },
+                        }
+                    except:
+                        docente = {
+                            'nombre': 'Docente',
+                            'apellido': 'Sin'
+                        }
+                    materias.append({
+                        'unidad_curricular': sp.unidad_curricular.nombre,
+                        'docente': docente,
                         'seccion': sp.seccion.codigo,
                         'salon': salon,
                         'first_dia': first.dia,
