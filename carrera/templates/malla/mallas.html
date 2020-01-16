@@ -12,7 +12,7 @@
   <div class="content-box mb-3">
     {% if alert %}
       <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong>¡La Malla fue eliminada con exito!</strong>
+        <strong>¡La Malla fue eliminada con éxito!</strong>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -100,10 +100,9 @@
 {% block javascript %}
 <script src="{% static 'dist/data_tables/js/jquery.dataTables.min.js' %}"></script>
 <script src="{% static 'dist/data_tables/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'assets/js/dataTable_init.js' %}"></script>
 <script>
   $(function () {
-    $('.datatables').DataTable();
-
     $(".btn-delete").click(function (e) {
       e.preventDefault();
       a = confirm('¿Estas seguro que deseas eliminar esta Malla?')

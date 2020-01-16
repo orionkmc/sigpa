@@ -23,14 +23,14 @@ CATEGORIA = (
 
 class Docentes(models.Model):
     cedula = models.PositiveIntegerField(
-        'cedula', unique=True, null=True, blank=True)
+        'Cédula', unique=True, null=True, blank=True)
     nombre = models.CharField(u'Nombre', max_length=50)
     apellido = models.CharField(u'Apellido', max_length=50)
     direccion = models.TextField(u'Dirección', null=True, blank=True)
     dedicacion = models.CharField(
-        u'Dedicacion', max_length=5, choices=DEDICAION, default='TC')
+        u'Dedicación', max_length=5, choices=DEDICAION, default='TC')
     categoria = models.CharField(
-        u'Categoria', max_length=10, choices=CATEGORIA, default='Instructor')
+        u'Categoría', max_length=10, choices=CATEGORIA, default='Instructor')
     status = models.CharField(
         u'Estatus', max_length=15, choices=Estatus, default='Contratado')
 
