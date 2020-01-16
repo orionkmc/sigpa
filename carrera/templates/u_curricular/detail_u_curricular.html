@@ -28,7 +28,7 @@
 
 {% block content %}
   <div class="content-box">
-    <h2>Información de la Unidad curricular "{{ object.nombre }}"</h2>
+    <h2>Información de la Unidad Curricular "{{ object.nombre }}"</h2>
 
     <div class="row">
       <div class="col-md-8 profile-col-right">
@@ -40,17 +40,17 @@
           </div>
 
           <div class="row" id="confirmed_trades_row">
-            <div class="col-md-5 profile-label">Unidades de Credito</div>
+            <div class="col-md-5 profile-label">Unidades de Crédito</div>
             <div class="col-md-6 profile-value">{{ object.uni_credi }}</div>
           </div>
 
           <div class="row shaded" id="trade_volume_row">
-            <div class="col-md-5 profile-label">Codigo</div>
+            <div class="col-md-5 profile-label">Código</div>
             <div class="col-md-6 profile-value">{{ object.codigo }}</div>
           </div>
 
           <div class="row" id="confirmed_trades_row">
-            <div class="col-md-5 profile-label">Descripcion</div>
+            <div class="col-md-5 profile-label">Descripción</div>
             <div class="col-md-6 profile-value">{{ object.descripcion|default:"-" }}</div>
           </div>
 

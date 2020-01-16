@@ -29,7 +29,7 @@
             <tr>
               <th>Código</th>
               <th>Nombre</th>
-              <th>Unidad de credito</th>
+              <th>Unidad de Crédito</th>
               <th class="text-center">Acciones</th>
             </tr>
           </thead>
@@ -102,10 +102,9 @@
 {% block javascript %}
 <script src="{% static 'dist/data_tables/js/jquery.dataTables.min.js' %}"></script>
 <script src="{% static 'dist/data_tables/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'assets/js/dataTable_init.js' %}"></script>
 <script>
   $(function () {
-    $('.datatables').DataTable();
-
     $(".btn-delete").click(function (e) {
       e.preventDefault();
       a = confirm('¿Estas seguro que deseas eliminar esta Unidad Curricular?')
