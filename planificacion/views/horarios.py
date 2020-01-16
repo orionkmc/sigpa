@@ -16,22 +16,38 @@ class HorarioView(View):
 
                 # last = sp.horarios_seccion_periodo.all().last()
                 cant = sp.horarios_seccion_periodo.all().count()
-                salon = '{} {}'.format(
-                    sp.horarios_seccion_periodo.all()[0].salon.piso.edificio.codigo,
-                    sp.horarios_seccion_periodo.all()[0].salon.codigo
-                )
-                materias.append({
-                    'unidad_curricular': sp.unidad_curricular.nombre,
-                    'docente': {
-                        'nombre': sp.docentes.nombre,
-                        'apellido': sp.docentes.apellido
-                    },
-                    'seccion': sp.seccion.codigo,
-                    'salon': salon,
-                    'first_dia': first.dia,
-                    'first_hora': first.hora,
-                    'cant': cant,
-                })
+                try:
+                    salon = '{} {}'.format(
+                        sp.horarios_seccion_periodo.all()[0]
+                            .salon.piso.edificio.codigo,
+                        sp.horarios_seccion_periodo.all()[0]
+                            .salon.codigo
+                    )
+                    materias.append({
+                        'unidad_curricular': sp.unidad_curricular.nombre,
+                        'docente': {
+                            'nombre': sp.docentes.nombre,
+                            'apellido': sp.docentes.apellido
+                        },
+                        'seccion': sp.seccion.codigo,
+                        'salon': salon,
+                        'first_dia': first.dia,
+                        'first_hora': first.hora,
+                        'cant': cant,
+                    })
+                except:
+                    materias.append({
+                        'unidad_curricular': '',
+                        'docente': {
+                            'nombre': '',
+                            'apellido': ''
+                        },
+                        'seccion': '',
+                        'salon': '',
+                        'first_dia': '',
+                        'first_hora': '',
+                        'cant': '',
+                    })
         return render(request, 'horarios/index.html', {
             'seccion': seccion,
             'dias': DIA_CHOICES,
