@@ -103,6 +103,7 @@ class SeccionView(View):
             sub_sub_estructura=seccion.periodo.trimestre)
         SeccionPeriodo
         if request.POST.get('seccion_periodo'):
+            print('seccion_periodo')
             d = SeccionPeriodo.objects.get(
                 pk=request.POST.get('seccion_periodo'))
             d.delete()
@@ -120,8 +121,7 @@ class SeccionView(View):
 
                     form.cleaned_data['id'].horarios_seccion_periodo.all().\
                         delete()
-
-                    for x in range(int(hora_desde), int(hora_hasta)):
+                    for x in range(int(hora_desde), int(hora_hasta) + 1):
                         Horarios(
                             seccion_periodo=form.cleaned_data['id'],
                             dia=form.cleaned_data['dia'],
