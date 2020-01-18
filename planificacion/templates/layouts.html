@@ -34,21 +34,27 @@
           <li class="list-item">
             <p class="list-title text-uppercase"></p>
             <ul class="list-unstyled">
-              <li>
-                <a href="javascript: void(0);" class="list-link link-arrow up down transition rotate rotate-revert">
-                  <span class="list-icon"></span>
-                  <i class="fas fa-calendar-check"></i>
-                  Docentes
-                </a>
-                <ul class="list-unstyled list-hidden" style="{% block docentes_display %}display: none;{% endblock %}">
-                  <li><a href="{% url 'docentes:docentes' %}" class="list-link {% block docentes_active %}{% endblock %}">
-                    <span class="list-icon"><i class="fas fa-calendar-alt"></i></span>Ver Docentes
-                  </a></li>
-                  <li><a href="{% url 'docentes:docente_add' %}" class="list-link {% block docente_add_active %}{% endblock %}">
-                    <span class="list-icon"><i class="fas fa-calendar-alt"></i></span>Agregar Docente
-                  </a></li>
-                </ul>
-              </li>
+              {% if perms.docentes.view_docentes or perms.docentes.add_docentes %}
+                <li>
+                  <a href="javascript: void(0);" class="list-link link-arrow up down transition rotate rotate-revert">
+                    <span class="list-icon"></span>
+                    <i class="fas fa-calendar-check"></i>
+                    Docentes
+                  </a>
+                  <ul class="list-unstyled list-hidden" style="{% block docentes_display %}display: none;{% endblock %}">
+                    {% if perms.docentes.view_docentes %}
+                    <li><a href="{% url 'docentes:docentes' %}" class="list-link {% block docentes_active %}{% endblock %}">
+                      <span class="list-icon"><i class="fas fa-calendar-alt"></i></span>Ver Docentes
+                    </a></li>
+                    {% endif %}
+                    {% if perms.docentes.add_docentes %}
+                      <li><a href="{% url 'docentes:docente_add' %}" class="list-link {% block docente_add_active %}{% endblock %}">
+                        <span class="list-icon"><i class="fas fa-calendar-alt"></i></span>Agregar Docente
+                      </a></li>
+                    {% endif %}
+                  </ul>
+                </li>
+              {% endif %}
               <li>
                 <a href="javascript: void(0);" class="list-link link-arrow up down transition rotate rotate-revert">
                   <span class="list-icon"></span>

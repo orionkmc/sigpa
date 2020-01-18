@@ -31,22 +31,24 @@
               <th class="text-center">Acciones</th>
             </tr>
           </thead>
-          <tfoot>
-            <tr>
-              <th colspan="4" class="text-center">
-                <a
-                  href="{% url 'docentes:docente_add' %}"
-                  class="text-danger"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title="Agregar Profesor">
-                  <span class="list-icon">
-                    <i class="fas fa-plus"></i>
-                  </span>
-                </a>
-              </th>
-            </tr>
-          </tfoot>
+          {% if perms.docentes.add_docentes %}
+            <tfoot>
+              <tr>
+                <th colspan="4" class="text-center">
+                  <a
+                    href="{% url 'docentes:docente_add' %}"
+                    class="text-danger"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Agregar Profesor">
+                    <span class="list-icon">
+                      <i class="fas fa-plus"></i>
+                    </span>
+                  </a>
+                </th>
+              </tr>
+            </tfoot>
+          {% endif %}
           <tbody>
             {% for docente in docentes %}
               <tr>
@@ -54,6 +56,7 @@
                 <td>{{docente.nombre}}</td>
                 <td>{{docente.apellido}}</td>
                 <td class="text-center">
+                  {% if perms.docentes.view_docentes %}
                   <a
                     href="{% url 'docentes:docente-detail' docente.pk %}"
                     class="btn btn-outline-danger btn-sm"
@@ -64,6 +67,8 @@
                       <i class="fas fa-search"></i>
                     </span>
                   </a>
+                  {% endif %}
+                  {% if perms.docentes.change_docentes %}
                   <a
                     href="{% url 'docentes:docente_edit' docente.pk %}"
                     class="btn btn-outline-danger btn-sm"
@@ -74,6 +79,8 @@
                       <i class="fas fa-edit"></i>
                     </span>
                   </a>
+                  {% endif %}
+                  {% if perms.docentes.delete_docentes %}
                   <form action="" method="POST" class="d-inline">
                     {% csrf_token %}
                     <input type="hidden" name="docente" value="{{ docente.pk }}">
@@ -87,6 +94,7 @@
                       </span>
                     </button>
                   </form>
+                  {% endif %}
                 </td>
               </tr>
             {% endfor %}
