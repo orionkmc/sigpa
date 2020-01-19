@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic import View
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from planificacion.forms import PeriodoForm, MallaForm
 from carrera.models import SubSubEstructura
@@ -24,15 +25,19 @@ SECCION_CHOICES = (
 # # # # # # # # # # # # # # # # # # # # # # # #
 #                  PERIODOS                   #
 # # # # # # # # # # # # # # # # # # # # # # # #
-class PeriodosView(ListView):
+class PeriodosView(PermissionRequiredMixin, ListView):
+    permission_required = 'planificacion.view_periodo'
     model = Periodo
 
 
-class PeriodoView(DetailView):
+class PeriodoView(PermissionRequiredMixin, DetailView):
+    permission_required = 'planificacion.view_periodo'
     model = Periodo
 
 
-class PlanificacionView(View):
+class PlanificacionView(PermissionRequiredMixin, View):
+    permission_required = 'planificacion.add_periodo'
+
     def get(self, request):
         periodo = False
         if request.GET.get('periodo'):
@@ -96,7 +101,9 @@ class PlanificacionView(View):
         return render(request, 'planificacion/periodo_agregar.html', context)
 
 
-class PlanificacionPlanillasView(View):
+class PlanificacionPlanillasView(PermissionRequiredMixin, View):
+    permission_required = 'planificacion.view_periodo'
+
     def get(self, request, pk):
         from django.db.models import Count, Q
 

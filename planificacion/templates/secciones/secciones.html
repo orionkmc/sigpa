@@ -13,16 +13,18 @@
         <div class="col-12">
           <h3 class="page-header">
             {{mp.trimestre.subestructura.nombre}}-{{mp.trimestre.nombre}}({{mp.trimestre}})
-            <a
-              href="{% url 'seccion_add' mp.periodo.pk mp.pk %}"
-              class="btn-sm text-success"
-              data-toggle="tooltip"
-              data-placement="top"
-              title="Agregar otra sección">
-              <span class="list-icon">
-                <i class="fas fa-plus"></i>
-              </span>
-            </a>
+            {% if perms.planificacion.add_seccion %}
+              <a
+                href="{% url 'seccion_add' mp.periodo.pk mp.pk %}"
+                class="btn-sm text-success"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Agregar otra sección">
+                <span class="list-icon">
+                  <i class="fas fa-plus"></i>
+                </span>
+              </a>
+            {% endif %}
           </h3>
           <table class="table table-hover table-sm">
             <thead>
@@ -40,6 +42,7 @@
                   <td>Sección {{sec.nombre}}</td>
                   <td>{{sec.turno}}</td>
                   <td class="text-right pr-5">
+                    {% if perms.planificacion.view_horarios %}
                     <a
                       href="{% url 'horario' sec.pk %}"
                       class="btn btn-outline-danger btn-sm"
@@ -50,39 +53,46 @@
                         <i class="fas fa-calendar"></i>
                       </span>
                     </a>
-                    <a
-                      href="{% url 'seccion_ver' mp.periodo.pk sec.pk %}"
-                      class="btn btn-outline-danger btn-sm"
-                      data-toggle="tooltip"
-                      data-placement="top"
-                      title="Ver Sección">
-                      <span class="list-icon">
-                        <i class="fas fa-search"></i>
-                      </span>
-                    </a>
-                    <a
-                      href="{% url 'seccion' mp.periodo.pk sec.pk %}"
-                      class="btn btn-outline-danger btn-sm"
-                      data-toggle="tooltip"
-                      data-placement="top"
-                      title="Editar Sección">
-                      <span class="list-icon">
-                        <i class="fas fa-edit"></i>
-                      </span>
-                    </a>
-                    <form action="" method="POST" class="d-inline">
-                      {% csrf_token %}
-                      <input type="hidden" name="seccion" value="{{ sec.pk }}">
-                      <button
-                        class="btn-delete btn btn-outline-danger btn-sm"
+                    {% endif %}
+                    {% if perms.planificacion.view_seccion %}
+                      <a
+                        href="{% url 'seccion_ver' mp.periodo.pk sec.pk %}"
+                        class="btn btn-outline-danger btn-sm"
                         data-toggle="tooltip"
                         data-placement="top"
-                        title="Eliminar Sección">
+                        title="Ver Sección">
                         <span class="list-icon">
-                          <i class="fas fa-trash"></i>
+                          <i class="fas fa-search"></i>
                         </span>
-                      </button>
-                    </form>
+                      </a>
+                    {% endif %}
+                    {% if perms.planificacion.change_seccion %}
+                      <a
+                        href="{% url 'seccion' mp.periodo.pk sec.pk %}"
+                        class="btn btn-outline-danger btn-sm"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Editar Sección">
+                        <span class="list-icon">
+                          <i class="fas fa-edit"></i>
+                        </span>
+                      </a>
+                    {% endif %}
+                    {% if perms.planificacion.delete_seccion %}
+                      <form action="" method="POST" class="d-inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="seccion" value="{{ sec.pk }}">
+                        <button
+                          class="btn-delete btn btn-outline-danger btn-sm"
+                          data-toggle="tooltip"
+                          data-placement="top"
+                          title="Eliminar Sección">
+                          <span class="list-icon">
+                            <i class="fas fa-trash"></i>
+                          </span>
+                        </button>
+                      </form>
+                    {% endif %}
                   </td>
                 </tr>
               {% empty %}

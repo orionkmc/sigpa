@@ -56,40 +56,49 @@
                 </li>
               {% endif %}
               <li>
-                <a href="javascript: void(0);" class="list-link link-arrow up down transition rotate rotate-revert">
-                  <span class="list-icon"></span>
-                  <i class="fas fa-calendar-check"></i>
-                  Carrera
-                </a>
-                <ul class="list-unstyled list-hidden" style="{% block carrera_display %}display: none;{% endblock %}">
-                  <li><a href="{% url 'carrera:ucurriculares' %}" class="list-link {% block uc_active %}{% endblock %}">
-                    <span class="list-icon"><i class="fas fa-font"></i></span> Unidades Curriculares
-                  </a></li>
-                  <li><a href="{% url 'carrera:mallas' %}" class="list-link {% block malla_active %}{% endblock %}">
-                    <span class="list-icon"><i class="fas fa-file-archive"></i></span>Mallas
-                  </a></li>
-                </ul>
+                {% if perms.carrera.view_unidadcurricular or perms.carrera.view_malla %}
+                  <a href="javascript: void(0);" class="list-link link-arrow up down transition rotate rotate-revert">
+                    <span class="list-icon"></span>
+                    <i class="fas fa-calendar-check"></i>
+                    Carrera
+                  </a>
+                  <ul class="list-unstyled list-hidden" style="{% block carrera_display %}display: none;{% endblock %}">
+                    {% if perms.carrera.view_unidadcurricular %}
+                      <li><a href="{% url 'carrera:ucurriculares' %}" class="list-link {% block uc_active %}{% endblock %}">
+                        <span class="list-icon"><i class="fas fa-font"></i></span> Unidades Curriculares
+                      </a></li>
+                    {% endif %}
+
+                    {% if perms.carrera.view_malla %}
+                      <li><a href="{% url 'carrera:mallas' %}" class="list-link {% block malla_active %}{% endblock %}">
+                        <span class="list-icon"><i class="fas fa-file-archive"></i></span>Mallas
+                      </a></li>
+                    {% endif %}
+                  </ul>
+                {% endif %}
               </li>
               <li>
-                <a href="javascript: void(0);" class="list-link link-arrow up down transition rotate rotate-revert">
-                  <span class="list-icon"></span>
-                  <i class="fas fa-calendar-check"></i>
-                  Planificación
-                </a>
-                <ul class="list-unstyled list-hidden" style="{% block planificacion_display %}display: none;{% endblock %}">
-                  <li>
-                    <a href="{% url 'planificacion:periodos' %}" class="list-link {% block periodos_active %}{% endblock %}">
-                      <span class="list-icon"><i class="fas fa-calendar-alt"></i></span>Periodos
-                    </a>
-                  </li>
-                  <!--
-                  <li>
-                    <a href="" class="list-link {% block secciones_active %}{% endblock %}">
-                      <span class="list-icon"><i class="fas fa-calendar-alt"></i></span>Secciones
-                    </a>
-                  </li>
-                  -->
-                </ul>
+                {% if perms.planificacion.view_periodo %}
+                  <a href="javascript: void(0);" class="list-link link-arrow up down transition rotate rotate-revert">
+                    <span class="list-icon"></span>
+                    <i class="fas fa-calendar-check"></i>
+                    Planificación
+                  </a>
+                  <ul class="list-unstyled list-hidden" style="{% block planificacion_display %}display: none;{% endblock %}">
+                    <li>
+                      <a href="{% url 'planificacion:periodos' %}" class="list-link {% block periodos_active %}{% endblock %}">
+                        <span class="list-icon"><i class="fas fa-calendar-alt"></i></span>Periodos
+                      </a>
+                    </li>
+                    <!--
+                    <li>
+                      <a href="" class="list-link {% block secciones_active %}{% endblock %}">
+                        <span class="list-icon"><i class="fas fa-calendar-alt"></i></span>Secciones
+                      </a>
+                    </li>
+                    -->
+                  </ul>
+                {% endif %}
               </li>
             </ul>
           </li>

@@ -5,14 +5,19 @@ from django.views.generic.detail import DetailView
 
 from carrera.models import UnidadCurricular, Malla, Subestructura
 from carrera.forms import UnidadCurricularForm, MallaForm, MallauceForm
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
 
 
-class UnidadCurricularDetailView(DetailView):
+class UnidadCurricularDetailView(PermissionRequiredMixin, DetailView):
+    permission_required = 'carrera.view_unidadcurricular'
     model = UnidadCurricular
     template_name = 'u_curricular/detail_u_curricular.html'
 
 
-class UnidadesCurricularesView(View):
+class UnidadesCurricularesView(PermissionRequiredMixin, View):
+    permission_required = 'carrera.view_unidadcurricular'
+
     def get(self, request):
         unidades_curriculares = UnidadCurricular.objects.all()
         context = {
@@ -23,6 +28,8 @@ class UnidadesCurricularesView(View):
             'u_curricular/u_curriculares.html', context)
 
     def post(self, request):
+        if not request.user.has_perm('carrera.delete_unidadcurricular'):
+            raise PermissionDenied
         alert = False
         try:
             d = UnidadCurricular.objects.get(pk=request.POST.get('uc'))
@@ -42,7 +49,9 @@ class UnidadesCurricularesView(View):
             'u_curricular/u_curriculares.html', context)
 
 
-class AddUnidadCurricularView(View):
+class AddUnidadCurricularView(PermissionRequiredMixin, View):
+    permission_required = 'carrera.add_unidadcurricular'
+
     def get(self, request):
         unidad_curricular_form = UnidadCurricularForm()
         context = {
@@ -52,6 +61,7 @@ class AddUnidadCurricularView(View):
             request, 'u_curricular/add_u_curricular.html', context)
 
     def post(self, request):
+        alert = False
         unidad_curricular_form = UnidadCurricularForm(request.POST)
         if unidad_curricular_form.is_valid():
             unidad_curricular_form.save()
@@ -65,7 +75,9 @@ class AddUnidadCurricularView(View):
             request, 'u_curricular/add_u_curricular.html', context)
 
 
-class EditUnidadCurricularView(View):
+class EditUnidadCurricularView(PermissionRequiredMixin, View):
+    permission_required = 'carrera.change_unidadcurricular'
+
     def get(self, request, uc):
         uc = UnidadCurricular.objects.get(pk=uc)
         unidad_curricular_form = UnidadCurricularForm(instance=uc)
@@ -92,7 +104,9 @@ class EditUnidadCurricularView(View):
             request, 'u_curricular/edit_u_curricular.html', context)
 
 
-class MallasView(View):
+class MallasView(PermissionRequiredMixin, View):
+    permission_required = 'carrera.view_malla'
+
     def get(self, request):
         mallas = Malla.objects.all()
         context = {
@@ -147,7 +161,9 @@ class AddMallaView(View):
         return render(request, 'malla/add_malla.html', context)
 
 
-class EditMallaView(View):
+class EditMallaView(PermissionRequiredMixin, View):
+    permission_required = 'carrera.view_malla'
+
     def get(self, request, malla):
         malla = Malla.objects.get(pk=malla)
         malla_form = MallaForm(instance=malla)

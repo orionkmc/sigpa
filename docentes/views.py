@@ -3,13 +3,18 @@ from django.shortcuts import render
 from docentes.models import Docentes
 from docentes.forms import DocenteForm
 from django.views.generic.detail import DetailView
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
 
 
-class DocenteDetailView(DetailView):
+class DocenteDetailView(PermissionRequiredMixin, DetailView):
+    permission_required = 'docentes.view_docentes'
     model = Docentes
 
 
-class DocentesView(View):
+class DocentesView(PermissionRequiredMixin, View):
+    permission_required = 'docentes.view_docentes'
+
     def get(self, request):
         d = Docentes.objects.all()
         context = {
@@ -18,6 +23,8 @@ class DocentesView(View):
         return render(request, 'docentes/docentes.html', context)
 
     def post(self, request):
+        if not request.user.has_perm('docentes.delete_docentes'):
+            raise PermissionDenied
         alert = False
         try:
             d = Docentes.objects.get(pk=request.POST.get('docente'))
@@ -35,7 +42,9 @@ class DocentesView(View):
         return render(request, 'docentes/docentes.html', context)
 
 
-class AddDocenteView(View):
+class AddDocenteView(PermissionRequiredMixin, View):
+    permission_required = 'docentes.add_docentes'
+
     def get(self, request):
         docente_form = DocenteForm()
         context = {
@@ -57,7 +66,9 @@ class AddDocenteView(View):
         return render(request, 'docentes/add_docente.html', context)
 
 
-class EditDocenteView(View):
+class EditDocenteView(PermissionRequiredMixin, View):
+    permission_required = 'docentes.change_docentes'
+
     def get(self, request, docente):
         d = Docentes.objects.get(pk=docente)
         docente_form = DocenteForm(instance=d)

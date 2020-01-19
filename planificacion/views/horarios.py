@@ -1,11 +1,14 @@
 from django.shortcuts import render
 from django.views.generic import View
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from planificacion.models import DIA_CHOICES, HORA_CHOICES
 from planificacion.models import SeccionPeriodo
 import json
 
 
-class HorarioView(View):
+class HorarioView(PermissionRequiredMixin, View):
+    permission_required = 'planificacion.view_horarios'
+
     def get(self, request, seccion):
         sps = SeccionPeriodo.objects.filter(seccion=seccion)
 

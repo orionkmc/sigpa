@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.core.exceptions import PermissionDenied
 from planificacion.forms import SeccionForm, SeccionPeriodoFormSet
 from carrera.models import MallaUCE, UnidadCurricular
 from planificacion.models import MallaUCEPeriodo, Periodo, Seccion,\
@@ -10,7 +12,9 @@ from docentes.models import Docentes
 # # # # # # # # # # # # # # # # # # # # # # # #
 
 
-class AddSeccionView(View):
+class AddSeccionView(PermissionRequiredMixin, View):
+    permission_required = 'planificacion.add_seccion'
+
     def get(self, request, periodo, tt):
         periodo = Periodo.objects.get(pk=periodo)
         mp = MallaUCEPeriodo.objects.get(pk=tt)
@@ -50,7 +54,9 @@ class AddSeccionView(View):
         return render(request, 'secciones/add_seccion.html', context)
 
 
-class SeccionesView(View):
+class SeccionesView(PermissionRequiredMixin, View):
+    permission_required = 'planificacion.view_seccion'
+
     def get(self, request, periodo):
         malla_periodo = MallaUCEPeriodo.objects.filter(periodo=periodo)
         context = {
@@ -59,6 +65,9 @@ class SeccionesView(View):
         return render(request, 'secciones/secciones.html', context)
 
     def post(self, request, periodo):
+        if not request.user.has_perm('planificacion.delete_seccion'):
+            raise PermissionDenied
+
         alert = False
         malla_periodo = MallaUCEPeriodo.objects.filter(
             periodo=periodo)
@@ -77,7 +86,9 @@ class SeccionesView(View):
         return render(request, 'secciones/secciones.html', context)
 
 
-class SeccionView(View):
+class SeccionView(PermissionRequiredMixin, View):
+    permission_required = 'planificacion.change_seccion'
+
     def get(self, request, periodo, seccion):
         seccion = Seccion.objects.get(pk=seccion)
         muce = MallaUCE.objects.filter(
@@ -138,7 +149,9 @@ class SeccionView(View):
         return render(request, 'secciones/seccion.html', context)
 
 
-class SeccionVerView(View):
+class SeccionVerView(PermissionRequiredMixin, View):
+    permission_required = 'planificacion.view_seccion'
+
     def get(self, request, periodo, seccion):
         s = Seccion.objects.get(pk=seccion)
         sps = SeccionPeriodo.objects.filter(seccion=s)

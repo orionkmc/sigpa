@@ -33,22 +33,24 @@
               <th class="text-center">Acciones</th>
             </tr>
           </thead>
-          <tfoot>
-            <tr>
-              <th colspan="4" class="text-center">
-                <a
-                  href="{% url 'carrera:ucurricular_add' %}"
-                  class="text-danger"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title="Agregar Unidad Curricular">
-                  <span class="list-icon">
-                    <i class="fas fa-plus"></i>
-                  </span>
-                </a>
-              </th>
-            </tr>
-          </tfoot>
+          {% if perms.carrera.add_unidadcurricular %}
+            <tfoot>
+              <tr>
+                <th colspan="4" class="text-center">
+                  <a
+                    href="{% url 'carrera:ucurricular_add' %}"
+                    class="text-danger"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Agregar Unidad Curricular">
+                    <span class="list-icon">
+                      <i class="fas fa-plus"></i>
+                    </span>
+                  </a>
+                </th>
+              </tr>
+            </tfoot>
+          {% endif %}
           <tbody>
             {% for uc in unidades_curriculares %}
               <tr>
@@ -56,39 +58,45 @@
                 <td>{{uc.nombre}}</td>
                 <td>{{uc.uni_credi}}</td>
                 <td class="text-center">
-                  <a
-                    href="{% url 'carrera:ucurricular-detail' uc.pk %}"
-                    class="btn btn-outline-danger btn-sm"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title="Ver Unidad Curricular">
-                    <span class="list-icon">
-                      <i class="fas fa-search"></i>
-                    </span>
-                  </a>
-                  <a
-                    href="{% url 'carrera:ucurricular_edit' uc.pk %}"
-                    class="btn btn-outline-danger btn-sm"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title="Editar Unidad Curricular">
-                    <span class="list-icon">
-                      <i class="fas fa-edit"></i>
-                    </span>
-                  </a>
-                  <form action="" method="POST" class="d-inline">
-                    {% csrf_token %}
-                    <input type="hidden" name="uc" value="{{ uc.pk }}">
-                    <button
-                      class="btn-delete btn btn-outline-danger btn-sm"
+                  {% if perms.carrera.view_unidadcurricular %}
+                    <a
+                      href="{% url 'carrera:ucurricular-detail' uc.pk %}"
+                      class="btn btn-outline-danger btn-sm"
                       data-toggle="tooltip"
                       data-placement="top"
-                      title="Eliminar Unidad Curricular">
+                      title="Ver Unidad Curricular">
                       <span class="list-icon">
-                        <i class="fas fa-trash"></i>
+                        <i class="fas fa-search"></i>
                       </span>
-                    </button>
-                  </form>
+                    </a>
+                  {% endif %}
+                  {% if perms.carrera.change_unidadcurricular %}
+                    <a
+                      href="{% url 'carrera:ucurricular_edit' uc.pk %}"
+                      class="btn btn-outline-danger btn-sm"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="Editar Unidad Curricular">
+                      <span class="list-icon">
+                        <i class="fas fa-edit"></i>
+                      </span>
+                    </a>
+                  {% endif %}
+                  {% if perms.carrera.delete_unidadcurricular %}
+                    <form action="" method="POST" class="d-inline">
+                      {% csrf_token %}
+                      <input type="hidden" name="uc" value="{{ uc.pk }}">
+                      <button
+                        class="btn-delete btn btn-outline-danger btn-sm"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Eliminar Unidad Curricular">
+                        <span class="list-icon">
+                          <i class="fas fa-trash"></i>
+                        </span>
+                      </button>
+                    </form>
+                  {% endif %}
                 </td>
               </tr>
             {% endfor %}

@@ -36,27 +36,29 @@
                       >
                       {% unidades_curricular m.unidad_curricular.value %}
                       </button>
-
-                      <form action="" method="POST" class="d-inline eliminar_uc">
-                        {% csrf_token %}
-                        {{ m.unidad_curricular }}
-                        <input type="hidden" name="seccion_periodo" value="{{ m.id.value }}">
-                        <button
-                          class="
-                            btn
-                            btn-sm
-                            btn-link
-                            text-danger
-                            float-right
-                            btn-delete"
-                          data-toggle="tooltip"
-                          data-placement="top"
-                          title="Eliminar Unidad Curricular">
-                          <span class="list-icon">
-                            <i class="fas fa-trash"></i>
-                          </span>
-                        </button>
-                      </form>
+                      
+                      {% if perms.planificacion.delete_seccion %}
+                        <form action="" method="POST" class="d-inline eliminar_uc">
+                          {% csrf_token %}
+                          {{ m.unidad_curricular }}
+                          <input type="hidden" name="seccion_periodo" value="{{ m.id.value }}">
+                          <button
+                            class="
+                              btn
+                              btn-sm
+                              btn-link
+                              text-danger
+                              float-right
+                              btn-delete"
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="Eliminar Unidad Curricular">
+                            <span class="list-icon">
+                              <i class="fas fa-trash"></i>
+                            </span>
+                          </button>
+                        </form>
+                        {% endif %}
                     </h2>
                   </div>
                   <div
