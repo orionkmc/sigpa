@@ -55,8 +55,9 @@
                   </ul>
                 </li>
               {% endif %}
-              <li>
-                {% if perms.carrera.view_unidadcurricular or perms.carrera.view_malla %}
+
+              {% if perms.carrera.view_unidadcurricular or perms.carrera.view_malla %}
+                <li>
                   <a href="javascript: void(0);" class="list-link link-arrow up down transition rotate rotate-revert">
                     <span class="list-icon"></span>
                     <i class="fas fa-calendar-check"></i>
@@ -75,10 +76,11 @@
                       </a></li>
                     {% endif %}
                   </ul>
-                {% endif %}
-              </li>
-              <li>
-                {% if perms.planificacion.view_periodo %}
+                </li>
+              {% endif %}
+
+              {% if perms.planificacion.view_periodo %}
+                <li>
                   <a href="javascript: void(0);" class="list-link link-arrow up down transition rotate rotate-revert">
                     <span class="list-icon"></span>
                     <i class="fas fa-calendar-check"></i>
@@ -98,8 +100,8 @@
                     </li>
                     -->
                   </ul>
-                {% endif %}
-              </li>
+                </li>
+              {% endif %}
             </ul>
           </li>
         </ul>

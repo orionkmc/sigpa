@@ -69,6 +69,9 @@
                     <div class="card-body px-1 py-0">
                       <div class="border-bottom p-3">
                         <div class="row">
+                          {{ horario_form.as_ }}
+                        </div>
+                        <div class="row">
                           <div class="col-md-3">
                             <div>{{ m.docentes.label }}</div>
                             <div>{{ m.docentes }}</div>
@@ -93,36 +96,36 @@
                         </div>
                         <div class="row">
                           <div class="col-md-3">
-                            <div>{{ m.dia.label }}</div>
-                            <div>{{ m.dia }}</div>
-                            {% if m.dia.errors %}
-                              {% for error in m.dia.errors %}
+                            <div>{{ horario_form.dia.label }}</div>
+                            <div>{{ horario_form.dia }}</div>
+                            {% if horario_form.dia.errors %}
+                              {% for error in horario_form.dia.errors %}
                                 <small class="form-text text-danger">{{ error }}</small>
                               {% endfor %}
                             {% endif %}
                           </div>
                           <div class="col-md-3">
-                            <div>{{ m.hora_desde.label }}</div>
-                            <div>{{ m.hora_desde }}</div>
-                            {% if m.hora_desde.errors %}
-                              {% for error in m.hora_desde.errors %}
+                            <div>{{ horario_form.hora_desde.label }}</div>
+                            <div>{{ horario_form.hora_desde }}</div>
+                            {% if horario_form.hora_desde.errors %}
+                              {% for error in horario_form.hora_desde.errors %}
                                 <small class="form-text text-danger">{{ error }}</small>
                               {% endfor %}
                             {% endif %}
                           </div>
                           <div class="col-md-3">
-                            <div>{{ m.hora_hasta.label }}</div>
-                            <div>{{ m.hora_hasta }}</div>
-                            {% if m.hora_hasta.errors %}
-                              {% for error in m.hora_hasta.errors %}
+                            <div>{{ horario_form.hora_hasta.label }}</div>
+                            <div>{{ horario_form.hora_hasta }}</div>
+                            {% if horario_form.hora_hasta.errors %}
+                              {% for error in horario_form.hora_hasta.errors %}
                                 <small class="form-text text-danger">{{ error }}</small>
                               {% endfor %}
                             {% endif %}
                           </div>
                           <div class="col-md-3">
-                            <div>{{ m.salon.label }}</div>
-                            <div>{{ m.salon }}</div>
-                            {% if m.salon.errors %}
+                            <div>{{ horario_form.salon.label }}</div>
+                            <div>{{ horario_form.salon }}</div>
+                            {% if horario_form.salon.errors %}
                               {% for error in m.salon.errors %}
                                 <small class="form-text text-danger">{{ error }}</small>
                               {% endfor %}

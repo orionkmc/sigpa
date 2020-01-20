@@ -1,11 +1,75 @@
 {% extends 'layouts.html' %}
 {% load static %}
+
 {% block planificacion_display %}display: block;{% endblock %}
 {% block periodos_active %}link-current{% endblock %}
 
 {% block content %}
   <div class="content-box mb-3">
+    <div class="row">
+      <div class="col-12">
+        <h4 class="text-center">
+          HORARIO {{ s.periodo.trayecto }}, {{ s.periodo.trimestre.nombre }} <br>
+          PNF INFORMATICA (SECCION {{ s.nombre }})
+        </h4>
+      </div>
+    </div>
+
     <br>
+    <form action="" method="POST">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-md">
+          <div>{{ horario_form.materia.label }}</div>
+          <div>{{ horario_form.materia }}</div>
+          {% if horario_form.materia.errors %}
+            {% for error in horario_form.materia.errors %}
+              <small class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+          {% endif %}
+        </div>
+        <div class="col-md">
+          <div>{{ horario_form.salon.label }}</div>
+          <div>{{ horario_form.salon }}</div>
+          {% if horario_form.salon.errors %}
+            {% for error in horario_form.salon.errors %}
+              <small class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+          {% endif %}
+        </div>
+        <div class="col-md">
+          <div>{{ horario_form.dia.label }}</div>
+          <div>{{ horario_form.dia }}</div>
+          {% if horario_form.dia.errors %}
+            {% for error in horario_form.dia.errors %}
+              <small class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+          {% endif %}
+        </div>
+        <div class="col-md">
+          <div>{{ horario_form.hora_desde.label }}</div>
+          <div>{{ horario_form.hora_desde }}</div>
+          {% if horario_form.hora_desde.errors %}
+            {% for error in horario_form.hora_desde.errors %}
+              <small class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+          {% endif %}
+        </div>
+        <div class="col-md">
+          <div>{{ horario_form.hora_hasta.label }}</div>
+          <div>{{ horario_form.hora_hasta }}</div>
+          {% if horario_form.hora_hasta.errors %}
+            {% for error in horario_form.hora_hasta.errors %}
+              <small class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+      <br>
+      <input type="submit" class="btn btn-primary btn-block" value="Agregar">
+    </form>
+    <br>
+
     <div class="row">
       <div class="col-12">
         <div class="table-responsive">
@@ -32,28 +96,34 @@
         </div>
       </div>
     </div>
+    <a href="{% url 'secciones' periodo %}" class="btn btn-primary btn-block">Volver</a>
   </div>
-  <a href="{% url 'secciones' periodo %}" class="btn btn-primary btn-block">Volver</a>
+  
 {% endblock %}
 
 {% block javascript %}
 <script>
     m = JSON.parse('{{ materias|safe }}');
+    console.log(m)
     m.map((m)=>{
-      a = `${m.first_dia}-${m.first_hora}`
+      a = `${m.dia}-${m.desde}`
       $('#' + a).attr('rowspan', m.cant);
+
       for (var i = 1; i < m.cant; i++) {
-        id_delete = `${m.first_dia}-${parseInt(m.first_hora) + i}`
+        id_delete = `${m.dia}-${parseInt(m.desde) + parseInt(i)}`
+        console.log(id_delete)
         $('#' + id_delete).remove();
       }
+      
       data = `<div>
         <span style="font-size: 10px;">${m.unidad_curricular}</span><br>
         <span style="font-size: 10px;">${m.docente.apellido} ${m.docente.nombre}</span><br>
-        <span style="font-size: 10px;">${m.seccion}: ${m.salon}</span>
+        <span style="font-size: 10px;">Seccion ${m.seccion}: ${m.salon}</span>
       </div>`
+      // data = `<strong>${m.dia}-${parseInt(m.desde)}</strong>`
       $('#' + a).html(data);
-    });
 
+    });
 </script>
 {% endblock %}
 

@@ -60,9 +60,30 @@ class SeccionPeriodoAdmin(admin.ModelAdmin):
 
 
 class HorariosAdmin(admin.ModelAdmin):
-    list_display = ('seccion_periodo', 'salon', 'dia', 'hora')
+    list_display = (
+        'periodo', 'seccion', 'materia', 'dia', 'desde', 'hasta',
+        'salon')
     raw_id_fields = ('seccion_periodo', 'salon')
 
+    def periodo(self, obj):
+        return "{}".format(
+            obj.seccion_periodo.seccion.periodo,
+        )
+
+    def seccion(self, obj):
+        return "{}".format(
+            obj.seccion_periodo.seccion.nombre,
+        )
+
+    def materia(self, obj):
+        return "{}".format(
+            obj.seccion_periodo.unidad_curricular,
+        )
+
+    periodo.short_description = 'Periodo'
+    seccion.short_description = 'Seccion'
+    materia.short_description = 'Materia'
+    materia.admin_order_field = 'seccion_periodo__unidad_curricular'
 # admin.site.register(Estructura, EstructuraAdmin)
 # admin.site.register(Subestructura, SubestructuraAdmin)
 # admin.site.register(SubSubEstructura)

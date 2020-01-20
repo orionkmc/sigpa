@@ -5,7 +5,7 @@ from django.core.exceptions import PermissionDenied
 from planificacion.forms import SeccionForm, SeccionPeriodoFormSet
 from carrera.models import MallaUCE, UnidadCurricular
 from planificacion.models import MallaUCEPeriodo, Periodo, Seccion,\
-    SeccionPeriodo, Horarios, HORA_CHOICES
+    SeccionPeriodo, Horarios
 from docentes.models import Docentes
 # # # # # # # # # # # # # # # # # # # # # # # #
 #                 SECCIONES                   #
@@ -95,9 +95,6 @@ class SeccionView(PermissionRequiredMixin, View):
             sub_sub_estructura=seccion.periodo.trimestre)
         seccion_periodo_form = SeccionPeriodoFormSet(
             instance=seccion,
-            initial={
-                'a': 'a'
-            }
         )
         context = {
             'seccion': seccion,
@@ -127,18 +124,6 @@ class SeccionView(PermissionRequiredMixin, View):
             if seccion_periodo_form.is_valid():
                 for form in seccion_periodo_form:
                     form.save()
-                    hora_desde = form.cleaned_data['hora_desde']
-                    hora_hasta = form.cleaned_data['hora_hasta']
-
-                    form.cleaned_data['id'].horarios_seccion_periodo.all().\
-                        delete()
-                    for x in range(int(hora_desde), int(hora_hasta) + 1):
-                        Horarios(
-                            seccion_periodo=form.cleaned_data['id'],
-                            dia=form.cleaned_data['dia'],
-                            hora=HORA_CHOICES[x - 1][0],
-                            salon=form.cleaned_data['salon'],
-                        ).save()
         context = {
             'seccion': seccion,
             'muce': muce,

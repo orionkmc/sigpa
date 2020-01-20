@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from carrera.models import Subestructura
-from planificacion.models import Periodo, Seccion, TURNO_CHOICES
 from django.forms import ModelForm, ModelChoiceField
+from django.forms.models import inlineformset_factory
+
+from carrera.models import Subestructura
+from planificacion.models import Periodo, Seccion, TURNO_CHOICES, Horarios
 from docentes.models import Docentes
 from planificacion.models import SeccionPeriodo
-from django.forms.models import inlineformset_factory
 from plantaFisica.models import Salon
 
 
@@ -129,36 +130,17 @@ HORA_CHOICES = (
 
 class MyModelChoiceField(ModelChoiceField):
     def label_from_instance(self, obj):
-        return '{}{}'.format(obj.piso.edificio.codigo, obj.codigo)
+        try:
+            s = obj.piso.edificio.codigo
+        except:
+            s = ''
+        return '{}{}'.format(
+            s,
+            obj.codigo
+        )
 
 
 class SeccionPeriodoForm(ModelForm):
-    SALON_CHOICES = Salon.objects.all()
-
-    dia = forms.CharField(
-        label="Dia", required=True, widget=forms.Select(
-            attrs={'class': 'form-control form-control-sm'},
-            choices=DIA_CHOICES
-        ))
-    hora_desde = forms.CharField(
-        label="Hora Desde", required=True, widget=forms.Select(
-            attrs={'class': 'form-control form-control-sm'},
-            choices=HORA_CHOICES,
-        ))
-
-    hora_hasta = forms.CharField(
-        label="Hora Hasta", required=True, widget=forms.Select(
-            attrs={'class': 'form-control form-control-sm'},
-            choices=HORA_CHOICES,
-        ))
-    salon = MyModelChoiceField(
-        queryset=SALON_CHOICES,
-        empty_label="Selecciona un Salon",
-        widget=forms.Select(
-            attrs={'class': 'form-control form-control-sm select2'},
-        ),
-        required=True
-    )
 
     class Meta:
         model = SeccionPeriodo
@@ -166,32 +148,6 @@ class SeccionPeriodoForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(SeccionPeriodoForm, self).__init__(*args, **kwargs)
-
-        instance = kwargs.get('instance', None)
-        dia = instance.horarios_seccion_periodo.all().first().dia
-        hora_desde = instance.horarios_seccion_periodo.all().first().hora
-        hora_hasta = instance.horarios_seccion_periodo.all().last().hora
-        salon = instance.horarios_seccion_periodo.all().last().salon
-
-        # {
-        #     'seccion': <Seccion: B-2018-T0T1-D-Sección Recular>,
-        #     'docentes': <Docentes: Dorys V Valero C>,
-        #     'suplente': None,
-        #     'unidad_curricular'
-        #     <UnidadCurricular: Introducción a los Proyectos y al Programa>,
-        #     'horas_teoricas': 0.0,
-        #     'horas_practicas': 0.0,
-        #     'dia': 'Lunes',
-        #     'hora_desde': '1',
-        #     'hora_hasta': '3',
-        #     'salon': <Salon: 1>,
-        #     'id': <SeccionPeriodo: B-2018-T0T1-D-Sección Recular>
-        # }
-
-        self.fields['dia'].initial = dia
-        self.fields['hora_desde'].initial = hora_desde
-        self.fields['hora_hasta'].initial = hora_hasta
-        self.fields['salon'].initial = salon
 
         self.fields['unidad_curricular'].widget = forms.HiddenInput()
         for field in self.fields:
@@ -208,6 +164,63 @@ class SeccionPeriodoForm(ModelForm):
             widget.attrs['class'] = 'form-control form-control-sm'
 
 
+class HorarioForm(forms.Form):
+
+    salon = MyModelChoiceField(
+        queryset=Salon.objects.all(),
+        empty_label="Selecciona un Salon",
+        widget=forms.Select(
+            attrs={'class': 'form-control form-control-sm select2'},
+        ),
+        required=True
+    )
+    dia = forms.CharField(
+        label="Dia", required=True, widget=forms.Select(
+            attrs={'class': 'form-control form-control-sm'},
+            choices=DIA_CHOICES
+        ))
+    hora_desde = forms.CharField(
+        label="Hora Desde", required=True, widget=forms.Select(
+            attrs={'class': 'form-control form-control-sm'},
+            choices=HORA_CHOICES,
+        ))
+
+    hora_hasta = forms.CharField(
+        label="Hora Hasta", required=True, widget=forms.Select(
+            attrs={'class': 'form-control form-control-sm'},
+            choices=HORA_CHOICES,
+        ))
+
+    def __init__(self, *args, **kwargs):
+        super(HorarioForm, self).__init__(*args, **kwargs)
+        initial = kwargs.get('initial', None)
+        data = [(m.pk, m.unidad_curricular.nombre)
+                for m in initial['materias']]
+        self.fields['materia'] = forms.ChoiceField(
+            label=u'Materias',
+            choices=data,
+            widget=forms.Select(
+                attrs={'class': 'form-control form-control-sm'}
+            ),
+            required=False
+        )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        sp = SeccionPeriodo.objects.get(
+            pk=cleaned_data.get("materia")
+        )
+        try:
+            h = Horarios.objects.get(
+                salon=cleaned_data.get("salon"),
+                dia=cleaned_data.get("dia"),
+                desde=cleaned_data.get("hora_desde"),
+            )
+            self.add_error(
+                'hora_desde', 'Salon, Dia, Hora ocupado.')
+        except Exception as e:
+            print(e)
 SeccionPeriodoFormSet = inlineformset_factory(
     Seccion,
     SeccionPeriodo,

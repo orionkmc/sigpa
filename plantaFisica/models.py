@@ -28,7 +28,8 @@ class Piso(models.Model):
 
 class Salon(models.Model):
     codigo = models.CharField(u'Codigo/Nombre', max_length=50)
-    piso = models.ForeignKey(Piso, on_delete=models.CASCADE)
+    piso = models.ForeignKey(
+        Piso, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.codigo

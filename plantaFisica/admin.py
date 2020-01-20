@@ -10,12 +10,16 @@ class SalonAdmin(admin.ModelAdmin):
     list_display = ('piso__edificio__codigo', 'piso__codigo', 'codigo')
 
     def piso__edificio__codigo(self, obj):
-        return obj.piso.edificio.codigo
+        if obj.piso is not None:
+            return obj.piso.edificio.codigo
+        return '-'
     piso__edificio__codigo.short_description = 'Edificio'
     piso__edificio__codigo.admin_order_field = 'piso__edificio__codigo'
 
     def piso__codigo(self, obj):
-        return obj.piso.codigo
+        if obj.piso is not None:
+            return obj.piso.codigo
+        return '-'
     piso__codigo.short_description = 'Piso'
     piso__codigo.admin_order_field = 'piso__codigo'
 

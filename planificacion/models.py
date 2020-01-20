@@ -116,10 +116,14 @@ class Horarios(models.Model):
         Salon, on_delete=models.CASCADE, null=True, blank=True)
     dia = models.CharField(
         u'Dia', max_length=20, choices=DIA_CHOICES, null=True, blank=True)
-    hora = models.CharField(
-        u'Hora', max_length=20, choices=HORA_CHOICES, null=True, blank=True)
+    desde = models.CharField(
+        u'Hora Desde', max_length=20, choices=HORA_CHOICES, null=True,
+        blank=True)
+    hasta = models.CharField(
+        u'Hora Hasta', max_length=20, choices=HORA_CHOICES, null=True,
+        blank=True)
 
     class Meta:
-        ordering = ('hora', )
+        ordering = ('desde', )
         verbose_name = 'Horario'
         verbose_name_plural = 'Horarios'
