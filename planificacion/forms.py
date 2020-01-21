@@ -2,7 +2,7 @@
 from django import forms
 from django.forms import ModelForm, ModelChoiceField
 from django.forms.models import inlineformset_factory
-
+from django.db.models import Q
 from carrera.models import Subestructura
 from planificacion.models import Periodo, Seccion, TURNO_CHOICES, Horarios
 from docentes.models import Docentes
@@ -208,19 +208,35 @@ class HorarioForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
 
-        sp = SeccionPeriodo.objects.get(
-            pk=cleaned_data.get("materia")
-        )
+        # sp = SeccionPeriodo.objects.get(
+        #     pk=cleaned_data.get("materia")
+        # )
         try:
-            h = Horarios.objects.get(
-                salon=cleaned_data.get("salon"),
-                dia=cleaned_data.get("dia"),
-                desde=cleaned_data.get("hora_desde"),
+            print(cleaned_data.get("hora_desde"))
+            print(cleaned_data.get("hora_hasta"))
+            Horarios.objects.get(
+                Q(salon=cleaned_data.get("salon")),
+                Q(dia=cleaned_data.get("dia")),
+                Q(desde__lte=cleaned_data.get("hora_desde")) &
+                Q(hasta__gte=cleaned_data.get("hora_desde"))
             )
-            self.add_error(
-                'hora_desde', 'Salon, Dia, Hora ocupado.')
+            self.add_error('hora_desde', 'Salon, Dia, Hora ocupado.')
         except Exception as e:
             print(e)
+
+        try:
+            print(cleaned_data.get("hora_desde"))
+            print(cleaned_data.get("hora_hasta"))
+            Horarios.objects.get(
+                Q(salon=cleaned_data.get("salon")),
+                Q(dia=cleaned_data.get("dia")),
+                Q(desde__lte=cleaned_data.get("hora_hasta")) &
+                Q(hasta__gte=cleaned_data.get("hora_hasta"))
+            )
+            self.add_error('hora_hasta', 'Salon, Dia, Hora ocupado.')
+        except Exception as e:
+            print(e)
+
 SeccionPeriodoFormSet = inlineformset_factory(
     Seccion,
     SeccionPeriodo,

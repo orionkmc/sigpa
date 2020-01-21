@@ -47,6 +47,7 @@ class HorarioView(PermissionRequiredMixin, View):
             )
             # sp.horarios_seccion_periodo.all().delete()
             # for x in range(int(hora_desde), int(hora_hasta) + 1):
+
             Horarios(
                 seccion_periodo=sp,
                 dia=horario_form.cleaned_data['dia'],
