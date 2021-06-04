@@ -1,4 +1,4 @@
-django==2.2.4
+django==2.2.21
 html5lib==1.0.1
 pillow>=6.2.0
 PyPDF2==1.26.0
